@@ -15,7 +15,7 @@ import java.util.jar.JarOutputStream;
 import org.objectweb.asm.ClassWriter;
 import org.objectweb.asm.tree.ClassNode;
 
-import me.nov.cafebabe.utils.LibClassWriter;
+import me.nov.cafebabe.utils.asm.LibClassWriter;
 
 public class Saver {
 	public static final byte[] javaMagic = { -54, -2, -70, -66 };

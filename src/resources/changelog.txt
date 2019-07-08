@@ -1,6 +1,10 @@
 <html>
 <h1>Changelog</hl>
 <hr>
+<h2>Version 0.0.3</h2>
+<p>First bytecode editing implementation, not editable.</p>
+<br>
+<hr>
 <h2>Version 0.0.2</h2>
 <p>Implementation of FrameHack to avoid getCommonSuperClass troubles. By saving frames will automatically get regenerated. Cafebabe will ask if an unseen super class is unclear.</p>
 <br>

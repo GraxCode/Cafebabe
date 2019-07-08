@@ -1,4 +1,4 @@
-package me.nov.cafebabe.utils;
+package me.nov.cafebabe.utils.ui;
 
 import java.awt.Graphics2D;
 import java.awt.Image;

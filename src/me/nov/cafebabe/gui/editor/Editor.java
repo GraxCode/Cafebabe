@@ -31,6 +31,7 @@ public class Editor extends JFrame {
 		this.pane = new WebDocumentPane();
 		pane.setCloseable(true);
 		pane.setTabMenuEnabled(true);
+		//TODO closeable not working
 		pane.addDocumentListener(new DocumentListener<DocumentData>() {
 
 			@Override
@@ -53,7 +54,6 @@ public class Editor extends JFrame {
 			}
 		});
 		pane.setUndecorated(false);
-
 		this.add(pane, BorderLayout.CENTER);
 		this.setJMenuBar(createMenu());
 

@@ -30,8 +30,8 @@ import com.alee.laf.text.WebTextField;
 
 import me.nov.cafebabe.gui.ClassTree;
 import me.nov.cafebabe.gui.ui.MethodListCellRenderer;
-import me.nov.cafebabe.utils.Listeners;
-import me.nov.cafebabe.utils.WebLaF;
+import me.nov.cafebabe.utils.ui.Listeners;
+import me.nov.cafebabe.utils.ui.WebLaF;
 
 public class ClassEditorPanel extends JPanel {
 	private static final long serialVersionUID = 1L;

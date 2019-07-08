@@ -38,7 +38,7 @@ import me.nov.cafebabe.gui.ui.MethodListCellRenderer;
 public class Cafebabe extends WebFrame {
 	private static final long serialVersionUID = 1L;
 	private static final String title = "Cafebabe Editor Lite";
-	private static final String version = "0.0.2";
+	private static final String version = "0.0.3";
 	public static Cafebabe gui;
 
 	private ClassTree tree;

@@ -13,8 +13,8 @@ import org.objectweb.asm.Opcodes;
 import org.objectweb.asm.tree.ClassNode;
 
 import me.nov.cafebabe.gui.node.SortedTreeNode;
-import me.nov.cafebabe.utils.Access;
-import me.nov.cafebabe.utils.Images;
+import me.nov.cafebabe.utils.asm.Access;
+import me.nov.cafebabe.utils.ui.Images;
 
 public class ClassTreeCellRenderer extends DefaultTreeCellRenderer implements Opcodes {
 	private static final long serialVersionUID = 1L;

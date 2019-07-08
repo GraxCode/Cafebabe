@@ -17,7 +17,7 @@ import org.objectweb.asm.Opcodes;
 import org.objectweb.asm.tree.MethodNode;
 
 import me.nov.cafebabe.gui.node.MethodListNode;
-import me.nov.cafebabe.utils.Access;
+import me.nov.cafebabe.utils.asm.Access;
 
 public class MethodListCellRenderer extends DefaultTreeCellRenderer implements Opcodes {
 	private static final long serialVersionUID = 1L;

@@ -5,8 +5,8 @@ import javax.swing.tree.DefaultMutableTreeNode;
 import org.objectweb.asm.tree.ClassNode;
 import org.objectweb.asm.tree.MethodNode;
 
-import me.nov.cafebabe.utils.Descriptors;
-import me.nov.cafebabe.utils.EscapedString;
+import me.nov.cafebabe.utils.asm.Descriptors;
+import me.nov.cafebabe.utils.formatting.EscapedString;
 
 public class MethodListNode extends DefaultMutableTreeNode {
 	private static final long serialVersionUID = 1L;

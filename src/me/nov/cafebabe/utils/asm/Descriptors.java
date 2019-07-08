@@ -1,4 +1,7 @@
-package me.nov.cafebabe.utils;
+package me.nov.cafebabe.utils.asm;
+
+import me.nov.cafebabe.utils.formatting.Colors;
+import me.nov.cafebabe.utils.formatting.Html;
 
 public class Descriptors {
 
@@ -24,23 +27,23 @@ public class Descriptors {
 				isFullyQualified = true;
 			} else {
 				if (chr == 'Z') {
-					result += "<font color=\"#7f0055\"><b>boolean</b></font>";
+					result += Html.color(Colors.eclipse_keyword, "boolean");
 				} else if (chr == 'B') {
-					result += "<font color=\"#7f0055\"><b>byte</b></font>";
+					result += Html.color(Colors.eclipse_keyword, "byte");
 				} else if (chr == 'C') {
-					result += "<font color=\"#7f0055\"><b>char</b></font>";
+					result += Html.color(Colors.eclipse_keyword, "char");
 				} else if (chr == 'S') {
-					result += "<font color=\"#7f0055\"><b>short</b></font>";
+					result += Html.color(Colors.eclipse_keyword, "short");
 				} else if (chr == 'I') {
-					result += "<font color=\"#7f0055\"><b>int</b></font>";
+					result += Html.color(Colors.eclipse_keyword, "int");
 				} else if (chr == 'J') {
-					result += "<font color=\"#7f0055\"><b>long</b></font>";
+					result += Html.color(Colors.eclipse_keyword, "long");
 				} else if (chr == 'F') {
-					result += "<font color=\"#7f0055\"><b>float</b></font>";
+					result += Html.color(Colors.eclipse_keyword, "float");
 				} else if (chr == 'D') {
-					result += "<font color=\"#7f0055\"><b>double</b></font>";
+					result += Html.color(Colors.eclipse_keyword, "double");
 				} else if (chr == 'V') {
-					result += "<font color=\"#7f0055\"><b>void</b></font>";
+					result += Html.color(Colors.eclipse_keyword, "void");
 				} else {
 					isFullyQualified = true;
 					continue;
@@ -156,7 +159,7 @@ public class Descriptors {
 	}
 
 	public static String getDisplayAccess(int access) {
-		String text = "<font color=\"#7f0055\"><b>";
+		String text = "<font color=\"" + Colors.eclipse_keyword + "\"><b>";
 		if ((access & 1) != 0) {
 			text = text + "public ";
 		}

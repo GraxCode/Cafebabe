@@ -16,6 +16,7 @@ import javax.swing.Box;
 import javax.swing.JButton;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
+import javax.swing.JScrollPane;
 import javax.swing.JSeparator;
 import javax.swing.JTextArea;
 import javax.swing.border.EtchedBorder;
@@ -30,11 +31,12 @@ import com.alee.laf.text.WebTextField;
 
 import me.nov.cafebabe.Cafebabe;
 import me.nov.cafebabe.gui.ClassMemberList;
+import me.nov.cafebabe.gui.editor.InstructionEditor;
 import me.nov.cafebabe.gui.node.MethodListNode;
 import me.nov.cafebabe.gui.ui.MethodListCellRenderer;
-import me.nov.cafebabe.utils.Descriptors;
-import me.nov.cafebabe.utils.Listeners;
-import me.nov.cafebabe.utils.WebLaF;
+import me.nov.cafebabe.utils.asm.Descriptors;
+import me.nov.cafebabe.utils.ui.Listeners;
+import me.nov.cafebabe.utils.ui.WebLaF;
 
 public class MethodEditorPanel extends JPanel {
 	private static final long serialVersionUID = 1L;
@@ -159,7 +161,7 @@ public class MethodEditorPanel extends JPanel {
 		JButton edit = new JButton("Edit Code");
 		edit.addActionListener(l -> {
 			MethodListNode mln = (MethodListNode) methodList.getLastSelectedPathComponent();
-			Cafebabe.gui.openEditor(new JTextArea(), mln.getClazz().name + "." + mln.getMethod().name, null,
+			Cafebabe.gui.openEditor(new JScrollPane(new InstructionEditor(mln.getMethod())), mln.getClazz().name + "." + mln.getMethod().name, null,
 					((JLabel) methodList.getCellRenderer().getTreeCellRendererComponent(methodList, mln, false, false, true, 0,
 							false)).getIcon());
 		});

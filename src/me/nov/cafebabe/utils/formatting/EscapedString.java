@@ -1,4 +1,4 @@
-package me.nov.cafebabe.utils;
+package me.nov.cafebabe.utils.formatting;
 
 public class EscapedString {
 	private String text;

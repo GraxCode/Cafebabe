@@ -1,4 +1,4 @@
-package me.nov.cafebabe.utils;
+package me.nov.cafebabe.utils.asm;
 
 import static org.objectweb.asm.Opcodes.ACC_ABSTRACT;
 import static org.objectweb.asm.Opcodes.ACC_ANNOTATION;

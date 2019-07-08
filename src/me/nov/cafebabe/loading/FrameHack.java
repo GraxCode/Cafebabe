@@ -113,15 +113,6 @@ public class FrameHack extends ClassWriter {
 		return i;
 	}
 
-	private static ClassNode visitOnce(ClassNode cn) {
-		ClassWriter cw = new ClassWriter(COMPUTE_MAXS);
-		cn.accept(cw);
-		ClassReader cr = new ClassReader(cw.toByteArray());
-		ClassNode newNode = new ClassNode();
-		cr.accept(newNode, ClassReader.EXPAND_FRAMES);
-		return newNode;
-	}
-
 	@Override
 	protected String getCommonSuperClass(String type1, String type2) {
 		if (type1.startsWith("CAFEBABE") || type2.startsWith("CAFEBABE")) {

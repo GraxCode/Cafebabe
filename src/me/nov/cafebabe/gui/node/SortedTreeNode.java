@@ -7,7 +7,7 @@ import javax.swing.tree.DefaultMutableTreeNode;
 
 import org.objectweb.asm.tree.ClassNode;
 
-import me.nov.cafebabe.utils.EscapedString;
+import me.nov.cafebabe.utils.formatting.EscapedString;
 
 public class SortedTreeNode extends DefaultMutableTreeNode {
 	private static final long serialVersionUID = 1L;

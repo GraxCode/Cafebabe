@@ -1,4 +1,4 @@
-package me.nov.cafebabe.utils;
+package me.nov.cafebabe.utils.ui;
 
 import java.beans.PropertyChangeEvent;
 import java.util.Objects;

@@ -1,4 +1,4 @@
-package me.nov.cafebabe.utils;
+package me.nov.cafebabe.utils.asm;
 
 import java.util.Map;
 
