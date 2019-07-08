@@ -54,7 +54,7 @@ public class AdressList extends JList<String> {
 				return "0000".substring(hex.length()) + hex; // "<html><b>"
 			}
 		});
-		ListUI ui = (ListUI) this.getUI();
+		ListUI ui = this.getUI();
 		if (ui instanceof WebListUI) {
 			WebListUI wlui = (WebListUI) ui;
 			wlui.setHighlightRolloverCell(false);

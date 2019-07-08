@@ -161,9 +161,9 @@ public class MethodEditorPanel extends JPanel {
 		JButton edit = new JButton("Edit Code");
 		edit.addActionListener(l -> {
 			MethodListNode mln = (MethodListNode) methodList.getLastSelectedPathComponent();
-			Cafebabe.gui.openEditor(new JScrollPane(new InstructionEditor(mln.getMethod())), mln.getClazz().name + "." + mln.getMethod().name, null,
-					((JLabel) methodList.getCellRenderer().getTreeCellRendererComponent(methodList, mln, false, false, true, 0,
-							false)).getIcon());
+			Cafebabe.gui.openEditor(new JScrollPane(new InstructionEditor(mln.getMethod())),
+					mln.getClazz().name + "." + mln.getMethod().name, null, ((JLabel) methodList.getCellRenderer()
+							.getTreeCellRendererComponent(methodList, mln, false, false, true, 0, false)).getIcon());
 		});
 		edit.setPreferredSize(new Dimension(100, (int) edit.getPreferredSize().getHeight()));
 		JButton decompile = new JButton("Decompile");

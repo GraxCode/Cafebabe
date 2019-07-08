@@ -85,5 +85,5 @@ public class InstructionEntry {
 		}
 		return sb.toString();
 	}
-	
+
 }

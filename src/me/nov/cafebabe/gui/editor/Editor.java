@@ -11,6 +11,7 @@ import javax.swing.JFrame;
 import javax.swing.JMenu;
 import javax.swing.JMenuBar;
 import javax.swing.JMenuItem;
+import javax.swing.WindowConstants;
 
 import com.alee.extended.tab.DocumentData;
 import com.alee.extended.tab.DocumentListener;
@@ -26,12 +27,12 @@ public class Editor extends JFrame {
 	public Editor() {
 		this.setTitle("Editor");
 		initBounds();
-		this.setDefaultCloseOperation(JFrame.HIDE_ON_CLOSE);
+		this.setDefaultCloseOperation(WindowConstants.HIDE_ON_CLOSE);
 		this.setLayout(new BorderLayout());
 		this.pane = new WebDocumentPane();
 		pane.setCloseable(true);
 		pane.setTabMenuEnabled(true);
-		//TODO closeable not working
+		// TODO closeable not working
 		pane.addDocumentListener(new DocumentListener<DocumentData>() {
 
 			@Override

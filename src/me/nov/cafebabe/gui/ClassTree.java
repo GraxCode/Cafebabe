@@ -49,6 +49,7 @@ public class ClassTree extends JTree implements IDropUser {
 		this.setFocusable(false);
 		this.setCellRenderer(new ClassTreeCellRenderer());
 		this.addTreeSelectionListener(new TreeSelectionListener() {
+			@Override
 			public void valueChanged(TreeSelectionEvent e) {
 				SortedTreeNode node = (SortedTreeNode) getLastSelectedPathComponent();
 				if (node != null && node.getClazz() != null) {
@@ -99,7 +100,7 @@ public class ClassTree extends JTree implements IDropUser {
 							if (entry.getSize() < 3) {
 								continue;
 							}
-							progress.setProgress((int) ((double) (fileNum / (double) files) * 50d));
+							progress.setProgress((int) (fileNum / (double) files * 50d));
 							progress.setText("Loading " + entry.getName());
 							InputStream stream = jf.getInputStream(entry);
 
@@ -129,7 +130,7 @@ public class ClassTree extends JTree implements IDropUser {
 					int size = classes.keySet().size();
 					fileNum = 0;
 					for (JarEntry e : classes.keySet()) {
-						progress.setProgress(50 + (int) ((double) (fileNum / (double) size) * 50d));
+						progress.setProgress(50 + (int) (fileNum / (double) size * 50d));
 						progress.setText("Creating tree element " + e.getName());
 						String[] path = e.getName().split("/");
 						SortedTreeNode current = root;
@@ -209,7 +210,7 @@ public class ClassTree extends JTree implements IDropUser {
 					while (inputEntries.hasMoreElements()) {
 						try {
 							JarEntry entry = inputEntries.nextElement();
-							progress.setProgress((int) ((double) (fileNum / (double) files) * 50d));
+							progress.setProgress((int) (fileNum / (double) files * 50d));
 							progress.setText("Rewriting file " + entry.getName());
 							InputStream stream = inputJarFile.getInputStream(entry);
 
@@ -245,7 +246,7 @@ public class ClassTree extends JTree implements IDropUser {
 					int size = classes.keySet().size();
 					for (JarEntry oldEntry : classes.keySet()) {
 						ClassNode clazz = classes.get(oldEntry);
-						progress.setProgress(50 + (int) ((double) (fileNum / (double) size) * 50d));
+						progress.setProgress(50 + (int) (fileNum / (double) size * 50d));
 						progress.setText("Exporting class " + clazz.name);
 						Saver.packFile(out, oldEntry, clazz.name + ".class",
 								Saver.exportNode(clazz, clazzes, new HashMap<>(), knownCommons));

@@ -27,6 +27,7 @@ public class ClassMemberList extends JTree {
 		this.setFocusable(false);
 		this.setCellRenderer(new MethodListCellRenderer());
 		this.addTreeSelectionListener(new TreeSelectionListener() {
+			@Override
 			public void valueChanged(TreeSelectionEvent e) {
 				MethodListNode node = (MethodListNode) getLastSelectedPathComponent();
 				if (node != null && node.getMethod() != null) {
