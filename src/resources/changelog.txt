@@ -1,6 +1,10 @@
 <html>
 <h1>Changelog</hl>
 <hr>
+<h2>Version 0.0.4</h2>
+<p>Added a mini control-flow connection line into the bytecode editor.</p>
+<br>
+<hr>
 <h2>Version 0.0.3</h2>
 <p>First bytecode editing implementation, not editable.</p>
 <br>

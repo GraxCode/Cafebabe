@@ -4,6 +4,10 @@ import java.util.ArrayList;
 
 import javax.swing.AbstractListModel;
 
+import org.objectweb.asm.tree.AbstractInsnNode;
+
+import me.nov.cafebabe.gui.editor.list.InstructionEntry;
+
 public class LazyListModel<E> extends AbstractListModel<E> {
 	private static final long serialVersionUID = 1L;
 
@@ -29,5 +33,15 @@ public class LazyListModel<E> extends AbstractListModel<E> {
 	@Override
 	public E getElementAt(int index) {
 		return list.get(index);
+	}
+
+	public int indexOf(AbstractInsnNode ain) {
+		for (int i = 0; i < list.size(); i++) {
+			InstructionEntry ie = (InstructionEntry) list.get(i);
+			if (ie.ain.equals(ain)) {
+				return i;
+			}
+		}
+		return -1;
 	}
 }

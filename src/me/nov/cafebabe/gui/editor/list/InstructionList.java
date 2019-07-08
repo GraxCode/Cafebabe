@@ -11,8 +11,10 @@ import me.nov.cafebabe.utils.ui.LazyListModel;
 
 public class InstructionList extends JList<InstructionEntry> {
 	private static final long serialVersionUID = 1L;
+	public MethodNode mn;
 
 	public InstructionList(MethodNode mn) {
+		this.mn = mn;
 		this.setFont(new Font(Font.SANS_SERIF, Font.PLAIN, 13));
 		this.refresh(mn);
 	}
