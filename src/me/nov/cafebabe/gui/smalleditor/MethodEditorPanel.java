@@ -31,7 +31,7 @@ import com.alee.laf.text.WebTextField;
 
 import me.nov.cafebabe.Cafebabe;
 import me.nov.cafebabe.gui.ClassMemberList;
-import me.nov.cafebabe.gui.editor.InstructionEditor;
+import me.nov.cafebabe.gui.editor.InstructionPanel;
 import me.nov.cafebabe.gui.node.MethodListNode;
 import me.nov.cafebabe.gui.ui.MethodListCellRenderer;
 import me.nov.cafebabe.utils.asm.Descriptors;
@@ -161,7 +161,7 @@ public class MethodEditorPanel extends JPanel {
 		JButton edit = new JButton("Edit Code");
 		edit.addActionListener(l -> {
 			MethodListNode mln = (MethodListNode) methodList.getLastSelectedPathComponent();
-			Cafebabe.gui.openEditor(new JScrollPane(new InstructionEditor(mln.getMethod())),
+			Cafebabe.gui.openEditor(new JScrollPane(new InstructionPanel(mln.getMethod())),
 					mln.getClazz().name + "." + mln.getMethod().name, null, ((JLabel) methodList.getCellRenderer()
 							.getTreeCellRendererComponent(methodList, mln, false, false, true, 0, false)).getIcon());
 		});

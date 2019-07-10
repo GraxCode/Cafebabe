@@ -11,10 +11,10 @@ import org.objectweb.asm.tree.MethodNode;
 import me.nov.cafebabe.gui.editor.list.AdressList;
 import me.nov.cafebabe.gui.editor.list.InstructionList;
 
-public class InstructionEditor extends JPanel {
+public class InstructionPanel extends JPanel {
 	private static final long serialVersionUID = 1L;
 
-	public InstructionEditor(MethodNode mn) {
+	public InstructionPanel(MethodNode mn) {
 		this.setLayout(new BorderLayout());
 		InstructionList il = new InstructionList(mn);
 		this.add(il, BorderLayout.CENTER);

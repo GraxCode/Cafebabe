@@ -131,6 +131,9 @@ public abstract class AbstractInsnNode {
 		return opcode;
 	}
 
+	public void setOpcode(int opcode) {
+		this.opcode = opcode;
+	}
 	/**
 	 * Returns the type of this instruction.
 	 *

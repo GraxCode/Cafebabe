@@ -27,23 +27,23 @@ public class Descriptors {
 				isFullyQualified = true;
 			} else {
 				if (chr == 'Z') {
-					result += Html.color(Colors.eclipse_keyword, "boolean");
+					result += Html.bold(Html.color(Colors.eclipse_keyword, "boolean"));
 				} else if (chr == 'B') {
-					result += Html.color(Colors.eclipse_keyword, "byte");
+					result += Html.bold(Html.color(Colors.eclipse_keyword, "byte"));
 				} else if (chr == 'C') {
-					result += Html.color(Colors.eclipse_keyword, "char");
+					result += Html.bold(Html.color(Colors.eclipse_keyword, "char"));
 				} else if (chr == 'S') {
-					result += Html.color(Colors.eclipse_keyword, "short");
+					result += Html.bold(Html.color(Colors.eclipse_keyword, "short"));
 				} else if (chr == 'I') {
-					result += Html.color(Colors.eclipse_keyword, "int");
+					result += Html.bold(Html.color(Colors.eclipse_keyword, "int"));
 				} else if (chr == 'J') {
-					result += Html.color(Colors.eclipse_keyword, "long");
+					result += Html.bold(Html.color(Colors.eclipse_keyword, "long"));
 				} else if (chr == 'F') {
-					result += Html.color(Colors.eclipse_keyword, "float");
+					result += Html.bold(Html.color(Colors.eclipse_keyword, "float"));
 				} else if (chr == 'D') {
-					result += Html.color(Colors.eclipse_keyword, "double");
+					result += Html.bold(Html.color(Colors.eclipse_keyword, "double"));
 				} else if (chr == 'V') {
-					result += Html.color(Colors.eclipse_keyword, "void");
+					result += Html.bold(Html.color(Colors.eclipse_keyword, "void"));
 				} else {
 					isFullyQualified = true;
 					continue;

@@ -1,4 +1,4 @@
-package me.nov.cafebabe.gui.editor.list;
+package me.nov.cafebabe.gui.node;
 
 import org.objectweb.asm.tree.AbstractInsnNode;
 import org.objectweb.asm.tree.FieldInsnNode;
@@ -14,13 +14,13 @@ import me.nov.cafebabe.utils.asm.Descriptors;
 import me.nov.cafebabe.utils.formatting.Colors;
 import me.nov.cafebabe.utils.formatting.EscapedString;
 import me.nov.cafebabe.utils.formatting.Html;
-import me.nov.cafebabe.utils.formatting.OpUtils;
+import me.nov.cafebabe.utils.formatting.OpcodeFormatting;
 
-public class InstructionEntry {
+public class InstructionNode {
 	public MethodNode mn;
 	public AbstractInsnNode ain;
 
-	public InstructionEntry(MethodNode mn, AbstractInsnNode ain) {
+	public InstructionNode(MethodNode mn, AbstractInsnNode ain) {
 		super();
 		this.mn = mn;
 		this.ain = ain;
@@ -33,7 +33,7 @@ public class InstructionEntry {
 		int type = ain.getType();
 		switch (type) {
 		case AbstractInsnNode.LABEL:
-			sb.append(Html.italics(Html.color(Colors.debug_grey, "label " + OpUtils.getLabelIndex(ain))));
+			sb.append(Html.italics(Html.color(Colors.debug_grey, "label " + OpcodeFormatting.getLabelIndex(ain))));
 			return sb.toString();
 		case AbstractInsnNode.LINE:
 			sb.append(Html.italics(Html.color(Colors.debug_grey, "line " + ((LineNumberNode) ain).line)));
@@ -41,14 +41,14 @@ public class InstructionEntry {
 		}
 		int opcode = ain.getOpcode();
 
-		sb.append(Html.color(Colors.getColor(type, opcode), Html.bold(OpUtils.getOpcodeText(opcode).toLowerCase())));
+		sb.append(Html.color(Colors.getColor(type, opcode), Html.bold(OpcodeFormatting.getOpcodeText(opcode).toLowerCase())));
 		sb.append('\t');
 		switch (type) {
 		case AbstractInsnNode.VAR_INSN:
 			sb.append(((VarInsnNode) ain).var);
 			break;
 		case AbstractInsnNode.JUMP_INSN:
-			sb.append(OpUtils.getLabelIndex(((JumpInsnNode) ain).label));
+			sb.append(OpcodeFormatting.getLabelIndex(((JumpInsnNode) ain).label));
 			break;
 		case AbstractInsnNode.TYPE_INSN:
 			sb.append(new EscapedString(((TypeInsnNode) ain).desc.replace('/', '.')));
@@ -67,7 +67,7 @@ public class InstructionEntry {
 			sb.append(" ");
 			sb.append(new EscapedString(min.owner.replace('/', '.')));
 			sb.append(".");
-			sb.append(Html.italics(Html.color(Colors.fields, new EscapedString(min.name).getEscapedText())));
+			sb.append(Html.italics(Html.color(Colors.methods, new EscapedString(min.name).getEscapedText())));
 			sb.append("(");
 			sb.append(Descriptors.getDisplayType(min.desc.split("\\)")[0].substring(1)));
 			sb.append(")");
@@ -75,13 +75,12 @@ public class InstructionEntry {
 		case AbstractInsnNode.LDC_INSN:
 			LdcInsnNode ldc = (LdcInsnNode) ain;
 			if (ldc.cst instanceof String) {
-				sb.append(Html.color(Colors.fields, "\"" + new EscapedString(ldc.cst.toString()) + "\""));
+				sb.append(Html.color(Colors.strings, "\"" + new EscapedString(ldc.cst.toString()) + "\""));
 			} else {
 				sb.append(Html.color(Colors.comment, ldc.cst.getClass().getSimpleName()));
 				sb.append(" ");
 				sb.append(ldc.cst.toString());
 			}
-
 		}
 		return sb.toString();
 	}

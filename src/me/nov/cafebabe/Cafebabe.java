@@ -34,11 +34,12 @@ import me.nov.cafebabe.gui.OuterSplitPane;
 import me.nov.cafebabe.gui.editor.Editor;
 import me.nov.cafebabe.gui.smalleditor.ChangelogPanel;
 import me.nov.cafebabe.gui.ui.MethodListCellRenderer;
+import me.nov.cafebabe.utils.ui.WebPatch;
 
 public class Cafebabe extends WebFrame {
 	private static final long serialVersionUID = 1L;
 	private static final String title = "Cafebabe Editor Lite";
-	private static final String version = "0.0.4";
+	private static final String version = "0.0.5";
 	public static Cafebabe gui;
 
 	private ClassTree tree;
@@ -55,6 +56,7 @@ public class Cafebabe extends WebFrame {
 		setLayout(new BorderLayout());
 		this.setJMenuBar(initMenuBar());
 		this.smallEditorPanel = new JScrollPane(new ChangelogPanel());
+		this.smallEditorPanel.getVerticalScrollBar().setUnitIncrement(16);
 		this.methods = new ClassMemberList();
 		this.tree = new ClassTree(methods);
 		this.add(new OuterSplitPane(new JScrollPane(tree), new InnerSplitPane(new JScrollPane(methods), smallEditorPanel)),
@@ -147,6 +149,7 @@ public class Cafebabe extends WebFrame {
 		UIManager.setLookAndFeel("com.sun.java.swing.plaf.nimbus.NimbusLookAndFeel");
 		WebLookAndFeel.install();
 		WebLookAndFeel.setDecorateFrames(true);
+		WebPatch.patchGreyscaleLag();
 		new Cafebabe();
 		gui.setVisible(true);
 	}

@@ -11,6 +11,7 @@ import javax.swing.JFrame;
 import javax.swing.JMenu;
 import javax.swing.JMenuBar;
 import javax.swing.JMenuItem;
+import javax.swing.JScrollPane;
 import javax.swing.WindowConstants;
 
 import com.alee.extended.tab.DocumentData;
@@ -18,6 +19,8 @@ import com.alee.extended.tab.DocumentListener;
 import com.alee.extended.tab.PaneData;
 import com.alee.extended.tab.WebDocumentPane;
 import com.alee.utils.TextUtils;
+
+import me.nov.cafebabe.Cafebabe;
 
 @SuppressWarnings({ "rawtypes", "unchecked" })
 public class Editor extends JFrame {
@@ -27,6 +30,7 @@ public class Editor extends JFrame {
 	public Editor() {
 		this.setTitle("Editor");
 		initBounds();
+		this.setIconImage(Cafebabe.gui.getIconImage());
 		this.setDefaultCloseOperation(WindowConstants.HIDE_ON_CLOSE);
 		this.setLayout(new BorderLayout());
 		this.pane = new WebDocumentPane();
@@ -37,11 +41,14 @@ public class Editor extends JFrame {
 
 			@Override
 			public void closed(DocumentData arg0, PaneData<DocumentData> arg1, int arg2) {
+				if(pane.getDocumentsCount() == 0) {
+					setVisible(false);
+				}
 			}
 
 			@Override
 			public boolean closing(DocumentData arg0, PaneData<DocumentData> arg1, int arg2) {
-				return false;
+				return true;
 			}
 
 			@Override
@@ -86,6 +93,10 @@ public class Editor extends JFrame {
 	}
 
 	public void open(Component c, String title, Icon icon, Color color) {
+		if(c instanceof JScrollPane) {
+			JScrollPane sp = (JScrollPane) c;
+			sp.getVerticalScrollBar().setUnitIncrement(16);
+		}
 		pane.openDocument(new DocumentData(TextUtils.generateId(), icon, title, color, c));
 	}
 

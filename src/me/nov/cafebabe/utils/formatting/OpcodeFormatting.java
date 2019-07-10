@@ -19,7 +19,7 @@ import org.objectweb.asm.tree.MultiANewArrayInsnNode;
 import org.objectweb.asm.tree.TypeInsnNode;
 import org.objectweb.asm.tree.VarInsnNode;
 
-public class OpUtils implements org.objectweb.asm.Opcodes {
+public class OpcodeFormatting implements org.objectweb.asm.Opcodes {
 	private static Map<Integer, String> opcodes = new HashMap<Integer, String>(getCodes());
 	private static Map<String, Integer> reopcodes = new HashMap<String, Integer>(getReCodes());
 

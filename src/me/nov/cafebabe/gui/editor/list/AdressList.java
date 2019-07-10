@@ -15,6 +15,7 @@ import org.objectweb.asm.tree.JumpInsnNode;
 
 import com.alee.laf.list.WebListUI;
 
+import me.nov.cafebabe.gui.node.InstructionNode;
 import me.nov.cafebabe.utils.ui.LazyListModel;
 
 public class AdressList extends JList<String> {
@@ -74,8 +75,8 @@ public class AdressList extends JList<String> {
 		for (AbstractInsnNode ain : il.mn.instructions.toArray()) {
 			if (ain.getType() == AbstractInsnNode.JUMP_INSN) {
 				int moveOut = 0;
-				int from = ((LazyListModel<InstructionEntry>) il.getModel()).indexOf(ain);
-				int to = ((LazyListModel<InstructionEntry>) il.getModel()).indexOf(((JumpInsnNode) ain).label);
+				int from = ((LazyListModel<InstructionNode>) il.getModel()).indexOf(ain);
+				int to = ((LazyListModel<InstructionNode>) il.getModel()).indexOf(((JumpInsnNode) ain).label);
 				for (int j = from; j < to; j++) {
 					moveOut = Math.max(mvout.getOrDefault(j, 0) + 4, moveOut);
 				}

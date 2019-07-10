@@ -6,7 +6,7 @@ import javax.swing.AbstractListModel;
 
 import org.objectweb.asm.tree.AbstractInsnNode;
 
-import me.nov.cafebabe.gui.editor.list.InstructionEntry;
+import me.nov.cafebabe.gui.node.InstructionNode;
 
 public class LazyListModel<E> extends AbstractListModel<E> {
 	private static final long serialVersionUID = 1L;
@@ -37,7 +37,7 @@ public class LazyListModel<E> extends AbstractListModel<E> {
 
 	public int indexOf(AbstractInsnNode ain) {
 		for (int i = 0; i < list.size(); i++) {
-			InstructionEntry ie = (InstructionEntry) list.get(i);
+			InstructionNode ie = (InstructionNode) list.get(i);
 			if (ie.ain.equals(ain)) {
 				return i;
 			}
