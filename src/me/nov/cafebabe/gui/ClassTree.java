@@ -13,7 +13,6 @@ import java.util.jar.JarEntry;
 import java.util.jar.JarFile;
 import java.util.jar.JarOutputStream;
 
-import javax.swing.JTree;
 import javax.swing.event.TreeSelectionEvent;
 import javax.swing.event.TreeSelectionListener;
 import javax.swing.tree.DefaultTreeModel;
@@ -22,6 +21,8 @@ import javax.swing.tree.TreeSelectionModel;
 import org.objectweb.asm.tree.ClassNode;
 
 import com.alee.extended.window.WebProgressDialog;
+import com.alee.laf.tree.TreeSelectionStyle;
+import com.alee.laf.tree.WebTree;
 import com.alee.utils.ThreadUtils;
 
 import me.nov.cafebabe.Cafebabe;
@@ -34,7 +35,7 @@ import me.nov.cafebabe.loading.Saver;
 import me.nov.cafebabe.utils.drop.IDropUser;
 import me.nov.cafebabe.utils.drop.JarDropHandler;
 
-public class ClassTree extends JTree implements IDropUser {
+public class ClassTree extends WebTree<SortedTreeNode> implements IDropUser {
 	private static final long serialVersionUID = 1L;
 	private DefaultTreeModel model;
 	private HashMap<JarEntry, ClassNode> classes;
@@ -48,6 +49,8 @@ public class ClassTree extends JTree implements IDropUser {
 		this.setShowsRootHandles(true);
 		this.setFocusable(false);
 		this.setCellRenderer(new ClassTreeCellRenderer());
+		this.setSelectionStyle ( TreeSelectionStyle.group );
+
 		this.addTreeSelectionListener(new TreeSelectionListener() {
 			@Override
 			public void valueChanged(TreeSelectionEvent e) {

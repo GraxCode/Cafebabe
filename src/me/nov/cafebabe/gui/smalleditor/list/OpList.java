@@ -6,20 +6,18 @@ import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
 
 import javax.swing.JList;
-import javax.swing.JOptionPane;
-
-import org.objectweb.asm.tree.AbstractInsnNode;
 
 import me.nov.cafebabe.gui.node.OpcodeNode;
-import me.nov.cafebabe.utils.asm.OpcodeLink;
+import me.nov.cafebabe.gui.opchooser.OpcodeChooserDialog;
 import me.nov.cafebabe.utils.ui.LazyListModel;
 
 public class OpList extends JList<OpcodeNode> {
 	private static final long serialVersionUID = 1L;
-	private int[] opcodes;
-	private AbstractInsnNode ain;
+	private int[] opcodes = {};
+	private OpcodeChooserDialog chooser;
 
-	public OpList(int... opcodes) {
+	public OpList(OpcodeChooserDialog chooser, int... opcodes) {
+		this.chooser = chooser;
 		this.opcodes = opcodes;
 		this.setFont(new Font(Font.SANS_SERIF, Font.PLAIN, 12));
 		LazyListModel<OpcodeNode> llm = new LazyListModel<OpcodeNode>();
@@ -27,48 +25,34 @@ public class OpList extends JList<OpcodeNode> {
 			llm.addElement(new OpcodeNode(opcode));
 		}
 		this.setModel(llm);
+		this.refresh();
 		this.repaint();
 		for (MouseListener ml : this.getMouseListeners())
 			this.removeMouseListener(ml);
 		this.addMouseListener(new MouseAdapter() {
 			public void mouseClicked(MouseEvent evt) {
-				if (evt.getClickCount() == 2) {
+				if (evt.getClickCount() >= 1) {
 					int index = locationToIndex(evt.getPoint());
 					OpcodeNode on = llm.getElementAt(index);
-
-					// if opcode is of same type else confirm change
-					boolean sameType = OpcodeLink.getOpcodeNode(on.opcode).getName()
-							.equals(OpcodeLink.getOpcodeNode(ain.getOpcode()).getName());
-					if (sameType || JOptionPane.showConfirmDialog(OpList.this,
-							"Do you really want to change the type of this instruction?\nThis will erase all data from this node.",
-							"Changing instruction type", JOptionPane.YES_NO_OPTION) == JOptionPane.YES_OPTION) {
-						if (sameType) {
-							ain.setOpcode(on.opcode);
-						} else {
-							// TODO
-							throw new IllegalArgumentException("unimplemented");
-						}
-						setSelectedIndex(index);
-					}
+					chooser.setOpcode(on.opcode);
+					setSelectedIndex(index);
+					chooser.refresh();
 				}
 			}
 		});
+
 	}
 
-	public void setNode(AbstractInsnNode ain) {
-		this.ain = ain;
+	public void refresh() {
+		clearSelection();
 		int i = 0;
-		boolean set = false;
-		for (int opcode : opcodes) {
-			if (ain.getOpcode() == opcode) {
-				this.setSelectedIndex(i);
-				set = true;
-				break;
+		if (opcodes != null)
+			for (int opcode : opcodes) {
+				if (chooser.getOpcode() == opcode) {
+					setSelectedIndex(i);
+				}
+				i++;
 			}
-			i++;
-		}
-		if (!set) {
-			this.clearSelection();
-		}
+		super.repaint();
 	}
 }

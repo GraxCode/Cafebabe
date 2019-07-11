@@ -1,84 +1,88 @@
 package me.nov.cafebabe.gui.smalleditor;
 
-import java.awt.BorderLayout;
-import java.util.ArrayList;
+import java.awt.Dimension;
+import java.awt.GridBagConstraints;
+import java.awt.GridBagLayout;
+import java.awt.Insets;
+import java.awt.event.MouseEvent;
+import java.awt.event.MouseListener;
 
+import javax.swing.BorderFactory;
+import javax.swing.JLabel;
 import javax.swing.JPanel;
-import javax.swing.JScrollPane;
+import javax.swing.JSeparator;
+import javax.swing.border.EtchedBorder;
 
 import org.objectweb.asm.Opcodes;
 import org.objectweb.asm.tree.AbstractInsnNode;
 import org.objectweb.asm.tree.MethodNode;
 
-import com.alee.extended.panel.WebAccordion;
-import com.alee.extended.panel.WebAccordionStyle;
-import com.alee.extended.panel.WebCollapsiblePane;
-import com.alee.laf.tabbedpane.TabbedPaneStyle;
-import com.alee.laf.tabbedpane.WebTabbedPane;
+import com.alee.laf.text.WebTextField;
 
 import me.nov.cafebabe.gui.editor.list.InstructionList;
-import me.nov.cafebabe.gui.smalleditor.list.OpList;
+import me.nov.cafebabe.gui.opchooser.OpcodeChooserDialog;
+import me.nov.cafebabe.utils.asm.OpcodeLink;
+import me.nov.cafebabe.utils.formatting.OpcodeFormatting;
 
 public class InstructionEditorPanel extends JPanel implements Opcodes {
 	private static final long serialVersionUID = 1L;
-	
-	private static WebAccordion accordion = null;
-	private static ArrayList<OpList> opLists = new ArrayList<>();
 
 	public InstructionEditorPanel(InstructionList instructionList, MethodNode mn, AbstractInsnNode ain) {
-		this.setLayout(new BorderLayout());
+		this.setLayout(new GridBagLayout());
+		this.setBorder(BorderFactory.createEmptyBorder(4, 10, 10, 10));
 		this.setFocusable(false);
-		WebTabbedPane tabbedPane = new WebTabbedPane();
-		tabbedPane.setTabbedPaneStyle(TabbedPaneStyle.attached);
-		tabbedPane.setTabPlacement(WebTabbedPane.TOP);
-		tabbedPane.addTab("Opcode", getOpcodeChooser(ain));
-		this.add(tabbedPane, BorderLayout.CENTER);
-	}
-
-	private WebAccordion getOpcodeChooser(AbstractInsnNode ain) {
-		if (accordion == null) {
-			//ugly but the only way to prevent lag every time
-			WebAccordion accordion = new WebAccordion(WebAccordionStyle.accordionStyle);
-			accordion.setFocusable(false);
-			accordion.setMultiplySelectionAllowed(true);
-			addOpList(accordion, "Variable",
-					new OpList(ISTORE, LSTORE, FSTORE, DSTORE, ASTORE, ILOAD, LLOAD, FLOAD, DLOAD, ALOAD));
-			addOpList(accordion, "Type", new OpList(NEW, CHECKCAST, INSTANCEOF, NEWARRAY, ANEWARRAY, MULTIANEWARRAY));
-			addOpList(accordion, "Method",
-					new OpList(INVOKEVIRTUAL, INVOKESPECIAL, INVOKESTATIC, INVOKEINTERFACE, INVOKEDYNAMIC));
-			addOpList(accordion, "Field", new OpList(GETSTATIC, PUTSTATIC, GETFIELD, PUTFIELD));
-			addOpList(accordion, "Jump", new OpList(GOTO, IFEQ, IFNE, IFLT, IFGE, IFGT, IFLE, IF_ICMPEQ, IF_ICMPNE, IF_ICMPLT,
-					IF_ICMPGE, IF_ICMPGT, IF_ICMPLE, IF_ACMPEQ, IF_ACMPNE, IFNULL, IFNONNULL));
-
-			addOpList(accordion, "End Nodes", new OpList(ATHROW, RETURN, IRETURN, LRETURN, FRETURN, DRETURN, ARETURN));
-			addOpList(accordion, "Calculation & Comparison",
-					new OpList(IADD, LADD, FADD, DADD, ISUB, LSUB, FSUB, DSUB, IMUL, LMUL, FMUL, DMUL, IDIV, LDIV, FDIV, DDIV,
-							IREM, LREM, FREM, DREM, INEG, LNEG, FNEG, DNEG, ISHL, LSHL, ISHR, LSHR, IUSHR, LUSHR, IAND, LAND, IOR,
-							LOR, IXOR, LXOR, LCMP, FCMPL, FCMPG, DCMPL, DCMPG));
-			addOpList(accordion, "Conversion",
-					new OpList(I2L, I2F, I2D, L2I, L2F, L2D, F2I, F2L, F2D, D2I, D2L, D2F, I2B, I2C, I2S));
-			addOpList(accordion, "Stack", new OpList(POP, POP2, DUP, DUP_X1, DUP_X2, DUP2, DUP2_X1, DUP2_X2, SWAP));
-			addOpList(accordion, "Constants",
-					new OpList(LDC, BIPUSH, SIPUSH, ACONST_NULL, ICONST_M1, ICONST_0, ICONST_1, ICONST_2, ICONST_3, ICONST_4,
-							ICONST_5, LCONST_0, LCONST_1, FCONST_0, FCONST_1, FCONST_2, DCONST_0, DCONST_1));
-			addOpList(accordion, "Arrays", new OpList(IALOAD, LALOAD, FALOAD, DALOAD, AALOAD, BALOAD, CALOAD, SALOAD, IASTORE,
-					LASTORE, FASTORE, DASTORE, AASTORE, BASTORE, CASTORE, SASTORE));
-			addOpList(accordion, "Other",
-					new OpList(TABLESWITCH, LOOKUPSWITCH, MONITORENTER, MONITOREXIT, IINC, NOP, JSR, RET));
-			for (WebCollapsiblePane wcp : accordion.getPanes()) {
-				wcp.collapse();
+		WebTextField opcode = new WebTextField(20);
+		opcode.setText(OpcodeFormatting.getOpcodeText(ain.getOpcode()).toLowerCase());
+		opcode.setEditable(false);
+		opcode.addMouseListener(new MouseListener() {
+			@Override
+			public void mouseReleased(MouseEvent e) {
 			}
-			InstructionEditorPanel.accordion = accordion;
-		}
-		for (OpList ol : opLists) {
-			ol.setNode(ain);
-		}
-		return accordion;
+			@Override
+			public void mousePressed(MouseEvent e) {
+			}
+			@Override
+			public void mouseExited(MouseEvent e) {
+			}
+			@Override
+			public void mouseEntered(MouseEvent e) {
+			}
+			@Override
+			public void mouseClicked(MouseEvent e) {
+				int newOp = new OpcodeChooserDialog(ain).getOpcode();
+				if (newOp != ain.getOpcode()) {
+					opcode.setText(OpcodeFormatting.getOpcodeText(newOp));
+					if(OpcodeLink.getOpcodeNode(newOp).getName().equals(ain.getClass().getName())) {
+						ain.setOpcode(newOp);
+					} else {
+						throw new RuntimeException("unimplemented");
+					}
+				}
+			}
+		});
+		JLabel opcodeLabel = new JLabel("Opcode:");
+		opcodeLabel.setDisplayedMnemonic('O');
+		opcodeLabel.setLabelFor(opcode);
+		GridBagConstraints gbc = new GridBagConstraints();
+		gbc.anchor = GridBagConstraints.WEST;
+		gbc.fill = GridBagConstraints.HORIZONTAL;
+		gbc.insets = new Insets(6, 6, 0, 0);
+		gbc.gridx = GridBagConstraints.RELATIVE;
+		gbc.gridy = 0;
+
+		this.add(opcodeLabel, gbc);
+		gbc.gridwidth = GridBagConstraints.REMAINDER;
+		this.add(opcode, gbc);
+
+		gbc.gridy++;
+		this.add(createSeparator(), gbc);
+
 	}
 
-	private void addOpList(WebAccordion acc, String title, OpList opList) {
-		opLists.add(opList);
-		acc.addPane(title, new JScrollPane(opList));
+	private JSeparator createSeparator() {
+		JSeparator sep = new JSeparator();
+		sep.setBorder(BorderFactory.createEtchedBorder(EtchedBorder.LOWERED));
+		sep.setPreferredSize(new Dimension(5, 2));
+		return sep;
 	}
-
 }
