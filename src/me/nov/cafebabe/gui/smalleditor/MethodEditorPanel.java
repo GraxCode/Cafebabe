@@ -6,8 +6,6 @@ import java.awt.Dimension;
 import java.awt.GridBagConstraints;
 import java.awt.GridBagLayout;
 import java.awt.Insets;
-import java.awt.event.MouseEvent;
-import java.awt.event.MouseListener;
 import java.lang.reflect.Field;
 import java.util.ArrayList;
 
@@ -17,9 +15,7 @@ import javax.swing.JButton;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
-import javax.swing.JSeparator;
 import javax.swing.JTextArea;
-import javax.swing.border.EtchedBorder;
 
 import org.objectweb.asm.Opcodes;
 import org.objectweb.asm.tree.MethodNode;
@@ -64,40 +60,23 @@ public class MethodEditorPanel extends JPanel {
 		nameLabel.setLabelFor(name);
 
 		access = accessToggleGroup();
-		access.addMouseListener(new MouseListener() {
-
-			@Override
-			public void mouseReleased(MouseEvent e) {
-				int acc = method.access; // do not lose old access
-				for (Component c : access.getComponents()) {
-					WebToggleButton tb = (WebToggleButton) c;
+		Listeners.addMouseReleasedListener(access, () -> {
+			int acc = method.access; // do not lose old access
+			for (Component c : access.getComponents()) {
+				WebToggleButton tb = (WebToggleButton) c;
+				try {
+					int accessInt = Opcodes.class.getField("ACC_" + tb.getToolTipText().toUpperCase()).getInt(null);
 					if (tb.isSelected()) {
-						try {
-							acc += Opcodes.class.getField("ACC_" + tb.getToolTipText().toUpperCase()).getInt(null);
-						} catch (Exception e1) {
-							e1.printStackTrace();
-						}
+						acc |= accessInt;
+					} else {
+						acc &= ~accessInt;
 					}
+				} catch (Exception e1) {
+					e1.printStackTrace();
 				}
-				method.access = acc;
 			}
-
-			@Override
-			public void mousePressed(MouseEvent e) {
-			}
-
-			@Override
-			public void mouseExited(MouseEvent e) {
-			}
-
-			@Override
-			public void mouseEntered(MouseEvent e) {
-			}
-
-			@Override
-			public void mouseClicked(MouseEvent e) {
-			}
-		});
+			method.access = acc;
+		}, true);
 		JLabel accessLabel = new JLabel("Access:");
 		accessLabel.setDisplayedMnemonic('A');
 		accessLabel.setLabelFor(access);
@@ -187,7 +166,7 @@ public class MethodEditorPanel extends JPanel {
 		this.add(name, gbc);
 
 		gbc.gridy++;
-		this.add(createSeparator(), gbc);
+		this.add(WebLaF.createSeparator(), gbc);
 
 		gbc.gridy++;
 		gbc.gridwidth = 1;
@@ -195,7 +174,7 @@ public class MethodEditorPanel extends JPanel {
 		gbc.gridwidth = GridBagConstraints.REMAINDER;
 		this.add(access, gbc);
 		gbc.gridy++;
-		this.add(createSeparator(), gbc);
+		this.add(WebLaF.createSeparator(), gbc);
 		gbc.gridy++;
 		gbc.gridwidth = 1;
 		this.add(argsLabel, gbc);
@@ -210,7 +189,7 @@ public class MethodEditorPanel extends JPanel {
 		this.add(returns, gbc);
 
 		gbc.gridy++;
-		this.add(createSeparator(), gbc);
+		this.add(WebLaF.createSeparator(), gbc);
 
 		gbc.gridy++;
 		gbc.gridwidth = 1;
@@ -252,6 +231,7 @@ public class MethodEditorPanel extends JPanel {
 	}
 
 	private WebButtonGroup accessToggleGroup() {
+		// do not change tooltips
 		WebToggleButton private_ = new WebToggleButton(MethodListCellRenderer.pri);
 		private_.setToolTipText("private");
 		WebToggleButton public_ = new WebToggleButton(MethodListCellRenderer.pub);
@@ -262,7 +242,7 @@ public class MethodEditorPanel extends JPanel {
 		static_.setToolTipText("static");
 		WebToggleButton final_ = new WebToggleButton(MethodListCellRenderer.fin);
 		final_.setToolTipText("final");
-		WebToggleButton abstract_ = new WebToggleButton(MethodListCellRenderer.nat);
+		WebToggleButton abstract_ = new WebToggleButton(MethodListCellRenderer.abs);
 		abstract_.setToolTipText("abstract");
 		WebToggleButton native_ = new WebToggleButton(MethodListCellRenderer.nat);
 		native_.setToolTipText("native");
@@ -288,13 +268,6 @@ public class MethodEditorPanel extends JPanel {
 		accessGroup.setButtonsDrawFocus(false);
 
 		return accessGroup;
-	}
-
-	private JSeparator createSeparator() {
-		JSeparator sep = new JSeparator();
-		sep.setBorder(BorderFactory.createEtchedBorder(EtchedBorder.LOWERED));
-		sep.setPreferredSize(new Dimension(5, 2));
-		return sep;
 	}
 
 	public void editMethod(MethodNode method) {

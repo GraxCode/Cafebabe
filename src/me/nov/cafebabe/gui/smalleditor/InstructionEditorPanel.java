@@ -1,6 +1,5 @@
 package me.nov.cafebabe.gui.smalleditor;
 
-import java.awt.Dimension;
 import java.awt.GridBagConstraints;
 import java.awt.GridBagLayout;
 import java.awt.Insets;
@@ -10,8 +9,6 @@ import java.awt.event.MouseListener;
 import javax.swing.BorderFactory;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
-import javax.swing.JSeparator;
-import javax.swing.border.EtchedBorder;
 
 import org.objectweb.asm.Opcodes;
 import org.objectweb.asm.tree.AbstractInsnNode;
@@ -23,6 +20,7 @@ import me.nov.cafebabe.gui.editor.list.InstructionList;
 import me.nov.cafebabe.gui.opchooser.OpcodeChooserDialog;
 import me.nov.cafebabe.utils.asm.OpcodeLink;
 import me.nov.cafebabe.utils.formatting.OpcodeFormatting;
+import me.nov.cafebabe.utils.ui.WebLaF;
 
 public class InstructionEditorPanel extends JPanel implements Opcodes {
 	private static final long serialVersionUID = 1L;
@@ -75,14 +73,7 @@ public class InstructionEditorPanel extends JPanel implements Opcodes {
 		this.add(opcode, gbc);
 
 		gbc.gridy++;
-		this.add(createSeparator(), gbc);
+		this.add(WebLaF.createSeparator(), gbc);
 
-	}
-
-	private JSeparator createSeparator() {
-		JSeparator sep = new JSeparator();
-		sep.setBorder(BorderFactory.createEtchedBorder(EtchedBorder.LOWERED));
-		sep.setPreferredSize(new Dimension(5, 2));
-		return sep;
 	}
 }

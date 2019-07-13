@@ -6,8 +6,6 @@ import java.awt.Dimension;
 import java.awt.GridBagConstraints;
 import java.awt.GridBagLayout;
 import java.awt.Insets;
-import java.awt.event.MouseEvent;
-import java.awt.event.MouseListener;
 import java.lang.reflect.Field;
 import java.util.ArrayList;
 
@@ -16,8 +14,6 @@ import javax.swing.Box;
 import javax.swing.JButton;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
-import javax.swing.JSeparator;
-import javax.swing.border.EtchedBorder;
 
 import org.objectweb.asm.Opcodes;
 import org.objectweb.asm.tree.ClassNode;
@@ -60,40 +56,23 @@ public class ClassEditorPanel extends JPanel {
 		nameLabel.setLabelFor(name);
 
 		access = accessToggleGroup();
-		access.addMouseListener(new MouseListener() {
-
-			@Override
-			public void mouseReleased(MouseEvent e) {
-				int acc = clazz.access; // do not lose old access
-				for (Component c : access.getComponents()) {
-					WebToggleButton tb = (WebToggleButton) c;
+		Listeners.addMouseReleasedListener(access, () -> {
+			int acc = clazz.access; // do not lose old access
+			for (Component c : access.getComponents()) {
+				WebToggleButton tb = (WebToggleButton) c;
+				try {
+					int accessInt = Opcodes.class.getField("ACC_" + tb.getToolTipText().toUpperCase()).getInt(null);
 					if (tb.isSelected()) {
-						try {
-							acc += Opcodes.class.getField("ACC_" + tb.getToolTipText().toUpperCase()).getInt(null);
-						} catch (Exception e1) {
-							e1.printStackTrace();
-						}
+						acc |= accessInt;
+					} else {
+						acc &= ~accessInt;
 					}
+				} catch (Exception e1) {
+					e1.printStackTrace();
 				}
-				clazz.access = acc;
 			}
-
-			@Override
-			public void mousePressed(MouseEvent e) {
-			}
-
-			@Override
-			public void mouseExited(MouseEvent e) {
-			}
-
-			@Override
-			public void mouseEntered(MouseEvent e) {
-			}
-
-			@Override
-			public void mouseClicked(MouseEvent e) {
-			}
-		});
+			clazz.access = acc;
+		}, true);
 		JLabel accessLabel = new JLabel("Access:");
 		accessLabel.setDisplayedMnemonic('A');
 		accessLabel.setLabelFor(access);
@@ -185,7 +164,7 @@ public class ClassEditorPanel extends JPanel {
 		this.add(name, gbc);
 
 		gbc.gridy++;
-		this.add(createSeparator(), gbc);
+		this.add(WebLaF.createSeparator(), gbc);
 
 		gbc.gridy++;
 		gbc.gridwidth = 1;
@@ -193,7 +172,7 @@ public class ClassEditorPanel extends JPanel {
 		gbc.gridwidth = GridBagConstraints.REMAINDER;
 		this.add(access, gbc);
 		gbc.gridy++;
-		this.add(createSeparator(), gbc);
+		this.add(WebLaF.createSeparator(), gbc);
 		gbc.gridy++;
 		gbc.gridwidth = 1;
 		this.add(versionLabel, gbc);
@@ -208,7 +187,7 @@ public class ClassEditorPanel extends JPanel {
 		this.add(superName, gbc);
 
 		gbc.gridy++;
-		this.add(createSeparator(), gbc);
+		this.add(WebLaF.createSeparator(), gbc);
 
 		gbc.gridy++;
 		gbc.gridwidth = 1;
@@ -224,7 +203,7 @@ public class ClassEditorPanel extends JPanel {
 		gbc.weightx = 1;
 		this.add(sourceFile, gbc);
 		gbc.gridy++;
-		this.add(createSeparator(), gbc);
+		this.add(WebLaF.createSeparator(), gbc);
 		gbc.gridy++;
 		gbc.gridwidth = 1;
 		this.add(WebLaF.createInfoLabel(itfLabel, "Separated by a comma"), gbc);
@@ -246,13 +225,14 @@ public class ClassEditorPanel extends JPanel {
 	}
 
 	private WebButtonGroup accessToggleGroup() {
+		// do not change tooltips
 		WebToggleButton private_ = new WebToggleButton(MethodListCellRenderer.pri);
 		private_.setToolTipText("private");
 		WebToggleButton public_ = new WebToggleButton(MethodListCellRenderer.pub);
 		public_.setToolTipText("public");
 		WebToggleButton protected_ = new WebToggleButton(MethodListCellRenderer.pro);
 		protected_.setToolTipText("protected");
-		WebToggleButton abstract_ = new WebToggleButton(MethodListCellRenderer.nat);
+		WebToggleButton abstract_ = new WebToggleButton(MethodListCellRenderer.abs);
 		abstract_.setToolTipText("abstract");
 		WebToggleButton final_ = new WebToggleButton(MethodListCellRenderer.fin);
 		final_.setToolTipText("final");
@@ -276,13 +256,6 @@ public class ClassEditorPanel extends JPanel {
 		accessGroup.setButtonsDrawFocus(false);
 
 		return accessGroup;
-	}
-
-	private JSeparator createSeparator() {
-		JSeparator sep = new JSeparator();
-		sep.setBorder(BorderFactory.createEtchedBorder(EtchedBorder.LOWERED));
-		sep.setPreferredSize(new Dimension(5, 2));
-		return sep;
 	}
 
 	public void editClass(ClassNode clazz) {

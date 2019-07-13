@@ -1,8 +1,12 @@
 package me.nov.cafebabe.utils.ui;
 
+import java.awt.Component;
+import java.awt.event.MouseEvent;
+import java.awt.event.MouseListener;
 import java.beans.PropertyChangeEvent;
 import java.util.Objects;
 
+import javax.swing.JComponent;
 import javax.swing.SwingUtilities;
 import javax.swing.event.ChangeEvent;
 import javax.swing.event.ChangeListener;
@@ -51,5 +55,40 @@ public class Listeners {
 		Document d = text.getDocument();
 		if (d != null)
 			d.addDocumentListener(dl);
+	}
+
+	public static void addMouseReleasedListener(JComponent c, Action action, boolean childs) {
+		c.addMouseListener(new MouseListener() {
+
+			@Override
+			public void mouseReleased(MouseEvent e) {
+				action.action();
+			}
+
+			@Override
+			public void mousePressed(MouseEvent e) {
+			}
+
+			@Override
+			public void mouseExited(MouseEvent e) {
+			}
+
+			@Override
+			public void mouseEntered(MouseEvent e) {
+			}
+
+			@Override
+			public void mouseClicked(MouseEvent e) {
+			}
+		});
+		if (childs) {
+			for (Component child : c.getComponents()) {
+				addMouseReleasedListener((JComponent) child, action, true);
+			}
+		}
+	}
+
+	public static interface Action {
+		void action();
 	}
 }

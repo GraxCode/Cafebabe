@@ -1,10 +1,14 @@
 package me.nov.cafebabe.utils.ui;
 
+import java.awt.Dimension;
 import java.awt.Toolkit;
 
+import javax.swing.BorderFactory;
 import javax.swing.ImageIcon;
 import javax.swing.JLabel;
+import javax.swing.JSeparator;
 import javax.swing.SwingConstants;
+import javax.swing.border.EtchedBorder;
 
 import com.alee.extended.image.WebImage;
 import com.alee.extended.panel.GroupPanel;
@@ -27,7 +31,12 @@ public class WebLaF {
 		overlayPanel.addOverlay(overlay, SwingConstants.TRAILING, SwingConstants.TOP);
 		overlayPanel.setComponentMargin(0, 0, 0, overlay.getPreferredSize().width);
 		return new GroupPanel(overlayPanel);
-
 	}
 
+	public static JSeparator createSeparator() {
+		JSeparator sep = new JSeparator();
+		sep.setBorder(BorderFactory.createEtchedBorder(EtchedBorder.LOWERED));
+		sep.setPreferredSize(new Dimension(5, 2));
+		return sep;
+	}
 }
