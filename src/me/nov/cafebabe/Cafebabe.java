@@ -8,6 +8,8 @@ import java.awt.Dimension;
 import java.awt.Toolkit;
 import java.awt.event.AWTEventListener;
 import java.awt.event.MouseEvent;
+import java.awt.event.WindowAdapter;
+import java.awt.event.WindowEvent;
 import java.io.File;
 
 import javax.swing.Icon;
@@ -15,6 +17,7 @@ import javax.swing.JComponent;
 import javax.swing.JFileChooser;
 import javax.swing.JFrame;
 import javax.swing.JMenuBar;
+import javax.swing.JOptionPane;
 import javax.swing.JScrollPane;
 import javax.swing.UIManager;
 import javax.swing.filechooser.FileNameExtensionFilter;
@@ -38,7 +41,7 @@ import me.nov.cafebabe.gui.ui.MethodListCellRenderer;
 public class Cafebabe extends WebFrame {
 	private static final long serialVersionUID = 1L;
 	private static final String title = "Cafebabe Editor Lite";
-	private static final String version = "0.0.5";
+	private static final String version = "0.0.6";
 	public static Cafebabe gui;
 
 	private ClassTree tree;
@@ -50,7 +53,16 @@ public class Cafebabe extends WebFrame {
 		gui = this;
 		setTitle(title + " " + version);
 		initBounds();
-		this.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+		this.setDefaultCloseOperation(JFrame.DO_NOTHING_ON_CLOSE);
+		this.addWindowListener(new WindowAdapter() {
+			@Override
+			public void windowClosing(WindowEvent we) {
+				if (JOptionPane.showConfirmDialog(Cafebabe.this, "Do you really want to exit?", "Confirm",
+						JOptionPane.YES_NO_OPTION) == JOptionPane.YES_OPTION) {
+					Runtime.getRuntime().exit(0);
+				}
+			}
+		});
 		this.setAlwaysOnTop(true);
 		setLayout(new BorderLayout());
 		this.setJMenuBar(initMenuBar());
@@ -62,7 +74,6 @@ public class Cafebabe extends WebFrame {
 				BorderLayout.CENTER);
 		HelpBar hb = new HelpBar();
 		this.add(hb, BorderLayout.SOUTH);
-
 		Toolkit.getDefaultToolkit().addAWTEventListener(new AWTEventListener() {
 			@Override
 			public void eventDispatched(AWTEvent e) {

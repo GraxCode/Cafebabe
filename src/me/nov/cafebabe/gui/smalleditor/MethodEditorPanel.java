@@ -1,5 +1,6 @@
 package me.nov.cafebabe.gui.smalleditor;
 
+import java.awt.Color;
 import java.awt.Component;
 import java.awt.Cursor;
 import java.awt.Dimension;
@@ -11,6 +12,7 @@ import java.util.ArrayList;
 
 import javax.swing.BorderFactory;
 import javax.swing.Box;
+import javax.swing.Icon;
 import javax.swing.JButton;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
@@ -28,9 +30,11 @@ import com.alee.laf.text.WebTextField;
 import me.nov.cafebabe.Cafebabe;
 import me.nov.cafebabe.gui.ClassMemberList;
 import me.nov.cafebabe.gui.editor.InstructionPanel;
+import me.nov.cafebabe.gui.graph.CFGPanel;
 import me.nov.cafebabe.gui.node.MethodListNode;
 import me.nov.cafebabe.gui.ui.MethodListCellRenderer;
 import me.nov.cafebabe.utils.asm.Descriptors;
+import me.nov.cafebabe.utils.formatting.Colors;
 import me.nov.cafebabe.utils.ui.Listeners;
 import me.nov.cafebabe.utils.ui.WebLaF;
 
@@ -140,17 +144,25 @@ public class MethodEditorPanel extends JPanel {
 		JButton edit = new JButton("Edit Code");
 		edit.addActionListener(l -> {
 			MethodListNode mln = (MethodListNode) methodList.getLastSelectedPathComponent();
+			Icon icon = ((JLabel) methodList.getCellRenderer().getTreeCellRendererComponent(methodList, mln, false, false,
+					true, 0, false)).getIcon();
 			Cafebabe.gui.openEditor(new JScrollPane(new InstructionPanel(mln.getMethod())),
-					mln.getClazz().name + "." + mln.getMethod().name, null, ((JLabel) methodList.getCellRenderer()
-							.getTreeCellRendererComponent(methodList, mln, false, false, true, 0, false)).getIcon());
+					mln.getClazz().name + "." + mln.getMethod().name, Colors.methodTabColor, icon);
 		});
 		edit.setPreferredSize(new Dimension(100, (int) edit.getPreferredSize().getHeight()));
 		JButton decompile = new JButton("Decompile");
 		decompile.addActionListener(l -> {
-			Cafebabe.gui.openEditor(new JTextArea(), "Method Name", null, null);
+			Cafebabe.gui.openEditor(new JTextArea(), "Method Name", Colors.decompilerTabColor, null);
 		});
 		decompile.setPreferredSize(new Dimension(100, (int) decompile.getPreferredSize().getHeight()));
-		JButton graph = new JButton("Show Graph");
+		JButton graph = new JButton("Create Graph");
+		graph.addActionListener(l -> {
+			MethodListNode mln = (MethodListNode) methodList.getLastSelectedPathComponent();
+			Icon icon = ((JLabel) methodList.getCellRenderer().getTreeCellRendererComponent(methodList, mln, false, false,
+					true, 0, false)).getIcon();
+			Cafebabe.gui.openEditor(new CFGPanel(mln.getMethod()), "Graph of " + mln.getClazz().name + "." + mln.getMethod().name, Colors.graphTabColor,
+					icon);
+		});
 		graph.setPreferredSize(new Dimension(100, (int) decompile.getPreferredSize().getHeight()));
 
 		GridBagConstraints gbc = new GridBagConstraints();

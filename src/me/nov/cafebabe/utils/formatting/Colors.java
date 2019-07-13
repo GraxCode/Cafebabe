@@ -1,5 +1,7 @@
 package me.nov.cafebabe.utils.formatting;
 
+import java.awt.Color;
+
 import org.objectweb.asm.Opcodes;
 import org.objectweb.asm.tree.AbstractInsnNode;
 
@@ -12,6 +14,20 @@ public class Colors implements Opcodes {
 	public static final String local_vars = "#6a3e3e";
 	public static final String comment = "#3f7f5f";
 
+	
+	//graph
+	public static final String edgeColor = "#111111";
+	public static final String jumpColor = "#39698a";
+	public static final String jumpColorGreen = "#388a47";
+	public static final String jumpColorRed = "#8a3e38";
+	public static final String jumpColorPurple = "#ff71388a";
+	public static final String jumpColorPink = "#ba057a"; // #8a386d
+	
+	//editor tab colors
+	public static final Color methodTabColor = new Color(0xffffcc);
+	public static final Color decompilerTabColor = new Color(0x89c4f4);
+	public static final Color graphTabColor = new Color(0xc8f7c5);
+	
 	public static String getColor(int type, int opcode) {
 		switch (opcode) {
 		case ATHROW:

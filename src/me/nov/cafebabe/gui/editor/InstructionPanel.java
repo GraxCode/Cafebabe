@@ -15,6 +15,7 @@ public class InstructionPanel extends JPanel {
 	private static final long serialVersionUID = 1L;
 
 	public InstructionPanel(MethodNode mn) {
+		this.setFocusable(false);
 		this.setLayout(new BorderLayout());
 		InstructionList il = new InstructionList(mn);
 		this.add(il, BorderLayout.CENTER);

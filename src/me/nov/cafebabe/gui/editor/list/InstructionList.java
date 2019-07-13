@@ -21,6 +21,7 @@ public class InstructionList extends JList<InstructionNode> {
 	public InstructionList(MethodNode mn) {
 		this.mn = mn;
 		this.setFont(new Font(Font.SANS_SERIF, Font.PLAIN, 13));
+		this.setFocusable(false);
 		this.refresh(mn);
 		this.addListSelectionListener(new ListSelectionListener() {
 

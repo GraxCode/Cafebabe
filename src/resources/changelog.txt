@@ -1,5 +1,9 @@
 <html>
 <h1>Changelog</hl>
+<h2>Version 0.0.6</h2>
+<p>Added the old control flow graph and exit confirmation.</p>
+<br>
+<hr>
 <hr>
 <h2>Version 0.0.5</h2>
 <p>Changed the color scheme and made some slight ui adjustments. Also worked on instruction editing.</p>

@@ -26,6 +26,7 @@ public class AdressList extends JList<String> {
 		super(new DefaultListModel<String>());
 		this.il = il;
 		this.setFont(new Font(Font.SERIF, Font.PLAIN, 13));
+		this.setFocusable(false);
 		this.setSelectionModel(new DefaultListSelectionModel() {
 			private static final long serialVersionUID = 1L;
 
