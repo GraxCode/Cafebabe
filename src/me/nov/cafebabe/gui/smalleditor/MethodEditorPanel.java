@@ -1,6 +1,5 @@
 package me.nov.cafebabe.gui.smalleditor;
 
-import java.awt.Color;
 import java.awt.Component;
 import java.awt.Cursor;
 import java.awt.Dimension;
@@ -17,7 +16,6 @@ import javax.swing.JButton;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
-import javax.swing.JTextArea;
 
 import org.objectweb.asm.Opcodes;
 import org.objectweb.asm.tree.MethodNode;
@@ -29,6 +27,7 @@ import com.alee.laf.text.WebTextField;
 
 import me.nov.cafebabe.Cafebabe;
 import me.nov.cafebabe.gui.ClassMemberList;
+import me.nov.cafebabe.gui.decompiler.DecompilerPanel;
 import me.nov.cafebabe.gui.editor.InstructionPanel;
 import me.nov.cafebabe.gui.graph.CFGPanel;
 import me.nov.cafebabe.gui.node.MethodListNode;
@@ -152,7 +151,11 @@ public class MethodEditorPanel extends JPanel {
 		edit.setPreferredSize(new Dimension(100, (int) edit.getPreferredSize().getHeight()));
 		JButton decompile = new JButton("Decompile");
 		decompile.addActionListener(l -> {
-			Cafebabe.gui.openEditor(new JTextArea(), "Method Name", Colors.decompilerTabColor, null);
+			MethodListNode mln = (MethodListNode) methodList.getLastSelectedPathComponent();
+			Icon icon = ((JLabel) methodList.getCellRenderer().getTreeCellRendererComponent(methodList, mln, false, false,
+					true, 0, false)).getIcon();
+			Cafebabe.gui.openEditor(new DecompilerPanel(mln.getClazz(), mln.getMethod()),
+					mln.getClazz().name + "." + mln.getMethod().name, Colors.decompilerTabColor, icon);
 		});
 		decompile.setPreferredSize(new Dimension(100, (int) decompile.getPreferredSize().getHeight()));
 		JButton graph = new JButton("Create Graph");
@@ -160,8 +163,8 @@ public class MethodEditorPanel extends JPanel {
 			MethodListNode mln = (MethodListNode) methodList.getLastSelectedPathComponent();
 			Icon icon = ((JLabel) methodList.getCellRenderer().getTreeCellRendererComponent(methodList, mln, false, false,
 					true, 0, false)).getIcon();
-			Cafebabe.gui.openEditor(new CFGPanel(mln.getMethod()), "Graph of " + mln.getClazz().name + "." + mln.getMethod().name, Colors.graphTabColor,
-					icon);
+			Cafebabe.gui.openEditor(new CFGPanel(mln.getMethod()),
+					"Graph of " + mln.getClazz().name + "." + mln.getMethod().name, Colors.graphTabColor, icon);
 		});
 		graph.setPreferredSize(new Dimension(100, (int) decompile.getPreferredSize().getHeight()));
 
