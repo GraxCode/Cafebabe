@@ -32,6 +32,7 @@ import me.nov.cafebabe.gui.ui.ClassTreeCellRenderer;
 import me.nov.cafebabe.loading.FrameHack;
 import me.nov.cafebabe.loading.Loader;
 import me.nov.cafebabe.loading.Saver;
+import me.nov.cafebabe.translations.Translations;
 import me.nov.cafebabe.utils.drop.IDropUser;
 import me.nov.cafebabe.utils.drop.JarDropHandler;
 
@@ -49,7 +50,7 @@ public class ClassTree extends WebTree<SortedTreeClassNode> implements IDropUser
 		this.setShowsRootHandles(true);
 		this.setFocusable(false);
 		this.setCellRenderer(new ClassTreeCellRenderer());
-		this.setSelectionStyle ( TreeSelectionStyle.group );
+		this.setSelectionStyle(TreeSelectionStyle.group);
 
 		this.addTreeSelectionListener(new TreeSelectionListener() {
 			@Override
@@ -75,8 +76,8 @@ public class ClassTree extends WebTree<SortedTreeClassNode> implements IDropUser
 
 	@Override
 	public void onJarLoad(int id, File input) {
-		final WebProgressDialog progress = new WebProgressDialog(Cafebabe.gui, "Loading");
-		progress.setText("Loading .jar file...");
+		final WebProgressDialog progress = new WebProgressDialog(Cafebabe.gui, Translations.get("Loading"));
+		progress.setText(Translations.get("Loading .jar file..."));
 
 		// loading algorithm taken from loader class
 		final Thread loader = new Thread(new Runnable() {
@@ -104,7 +105,7 @@ public class ClassTree extends WebTree<SortedTreeClassNode> implements IDropUser
 								continue;
 							}
 							progress.setProgress((int) (fileNum / (double) files * 50d));
-							progress.setText("Loading " + entry.getName());
+							progress.setText(Translations.get("Loading file") + " " + entry.getName());
 							InputStream stream = jf.getInputStream(entry);
 
 							ByteArrayOutputStream bos = new ByteArrayOutputStream();
@@ -134,7 +135,7 @@ public class ClassTree extends WebTree<SortedTreeClassNode> implements IDropUser
 					fileNum = 0;
 					for (JarEntry e : classes.keySet()) {
 						progress.setProgress(50 + (int) (fileNum / (double) size * 50d));
-						progress.setText("Creating tree element " + e.getName());
+						progress.setText(Translations.get("Creating tree element") + " " + e.getName());
 						String[] path = e.getName().split("/");
 						SortedTreeClassNode current = root;
 						for (int i = 0; i < path.length; i++) {
@@ -167,7 +168,7 @@ public class ClassTree extends WebTree<SortedTreeClassNode> implements IDropUser
 					e.printStackTrace();
 				}
 				progress.setProgress(100);
-				progress.setText("Finished loading!");
+				progress.setText(Translations.get("Finished loading!"));
 				ThreadUtils.sleepSafely(500);
 				progress.setVisible(false);
 			}
@@ -185,12 +186,12 @@ public class ClassTree extends WebTree<SortedTreeClassNode> implements IDropUser
 	public String getToolTipText() {
 		if (inputFile != null)
 			return inputFile.getAbsolutePath();
-		return "Drop a .jar file here";
+		return Translations.get("Drop a .jar file here");
 	}
 
 	public void saveJar(File output) {
-		final WebProgressDialog progress = new WebProgressDialog(Cafebabe.gui, "Saving");
-		progress.setText("Saving as " + output.getName() + "...");
+		final WebProgressDialog progress = new WebProgressDialog(Cafebabe.gui, Translations.get("Saving"));
+		progress.setText(Translations.get(Translations.get("Saving as") + " " + output.getName() + "..."));
 
 		// loading algorithm taken from loader class
 		final Thread loader = new Thread(new Runnable() {
@@ -214,7 +215,7 @@ public class ClassTree extends WebTree<SortedTreeClassNode> implements IDropUser
 						try {
 							JarEntry entry = inputEntries.nextElement();
 							progress.setProgress((int) (fileNum / (double) files * 50d));
-							progress.setText("Rewriting file " + entry.getName());
+							progress.setText(Translations.get("Rewriting file") + " " + entry.getName());
 							InputStream stream = inputJarFile.getInputStream(entry);
 
 							ByteArrayOutputStream bos = new ByteArrayOutputStream();
@@ -250,7 +251,7 @@ public class ClassTree extends WebTree<SortedTreeClassNode> implements IDropUser
 					for (JarEntry oldEntry : classes.keySet()) {
 						ClassNode clazz = classes.get(oldEntry);
 						progress.setProgress(50 + (int) (fileNum / (double) size * 50d));
-						progress.setText("Exporting class " + clazz.name);
+						progress.setText(Translations.get("Exporting class") + " " + clazz.name);
 						Saver.packFile(out, oldEntry, clazz.name + ".class",
 								Saver.exportNode(clazz, clazzes, new HashMap<>(), knownCommons));
 						fileNum++;
@@ -263,7 +264,7 @@ public class ClassTree extends WebTree<SortedTreeClassNode> implements IDropUser
 					e.printStackTrace();
 				}
 				progress.setProgress(100);
-				progress.setText("Finished saving!");
+				progress.setText(Translations.get("Finished saving!"));
 				ThreadUtils.sleepSafely(500);
 				progress.setVisible(false);
 			}

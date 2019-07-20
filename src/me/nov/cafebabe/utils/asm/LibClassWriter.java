@@ -13,6 +13,7 @@ import org.objectweb.asm.ClassWriter;
 import org.objectweb.asm.tree.ClassNode;
 
 import me.nov.cafebabe.loading.Loader;
+import me.nov.cafebabe.translations.Translations;
 
 public class LibClassWriter extends ClassWriter {
 
@@ -69,8 +70,8 @@ public class LibClassWriter extends ClassWriter {
 			Dimension screenSize = Toolkit.getDefaultToolkit().getScreenSize();
 			dummy.setLocation(screenSize.width / 2, screenSize.height / 2);
 			dummy.setAlwaysOnTop(true);
-			String superclass = JOptionPane.showInputDialog(dummy,
-					"Whats the common super class of " + type1 + " and " + type2, "java/lang/Object");
+			String superclass = JOptionPane.showInputDialog(dummy, Translations.get("What is the common super class of") + " "
+					+ type1 + " " + Translations.get("and") + " " + type2, "java/lang/Object");
 			dummy.dispose();
 			if (superclass == null || superclass.isEmpty()) {
 				return "java/lang/Object";

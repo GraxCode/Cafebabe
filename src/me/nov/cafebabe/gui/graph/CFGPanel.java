@@ -28,6 +28,7 @@ import me.nov.cafebabe.analysis.blocks.Converter;
 import me.nov.cafebabe.gui.graph.CFGraph.CFGComponent;
 import me.nov.cafebabe.gui.graph.layout.PatchedHierarchicalLayout;
 import me.nov.cafebabe.gui.graph.vertex.BlockVertex;
+import me.nov.cafebabe.translations.Translations;
 import me.nov.cafebabe.utils.formatting.Colors;
 import me.nov.cafebabe.utils.ui.Images;
 
@@ -47,12 +48,12 @@ public class CFGPanel extends JPanel {
 		JPanel lpad = new JPanel();
 		lpad.setBorder(new EmptyBorder(1, 5, 0, 1));
 		lpad.setLayout(new GridLayout());
-		lpad.add(new JLabel("Control Flow Graph"));
+		lpad.add(new JLabel(Translations.get("Control Flow Graph")));
 		JPanel rs = new JPanel();
 		rs.setLayout(new GridLayout(1, 5));
 		for (int i = 0; i < 3; i++)
 			rs.add(new JPanel());
-		JButton save = new JButton("Save");
+		JButton save = new JButton(Translations.get("Save..."));
 		save.addActionListener(l -> {
 			File parentDir = new File(System.getProperty("user.home") + File.separator + "Desktop");
 			JFileChooser jfc = new JFileChooser(parentDir);
@@ -77,7 +78,7 @@ public class CFGPanel extends JPanel {
 			}
 		});
 		rs.add(save);
-		JButton reload = new JButton("Reload");
+		JButton reload = new JButton(Translations.get("Reload"));
 		reload.addActionListener(l -> {
 			generateGraph();
 		});

@@ -1,0 +1,7 @@
+<html>
+<h1>%s</hl>
+<hr>
+<h2>Version %s</h2>
+<p>Copyright 2019 - GraxCode - All rights reserved</p>
+<font size="3">
+<br>

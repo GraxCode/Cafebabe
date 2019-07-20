@@ -11,6 +11,8 @@ import java.awt.event.MouseEvent;
 import java.awt.event.WindowAdapter;
 import java.awt.event.WindowEvent;
 import java.io.File;
+import java.lang.reflect.Field;
+import java.nio.charset.Charset;
 
 import javax.swing.Icon;
 import javax.swing.JComponent;
@@ -35,13 +37,15 @@ import me.nov.cafebabe.gui.HelpBar;
 import me.nov.cafebabe.gui.InnerSplitPane;
 import me.nov.cafebabe.gui.OuterSplitPane;
 import me.nov.cafebabe.gui.editor.Editor;
+import me.nov.cafebabe.gui.preferences.PreferencesDialog;
 import me.nov.cafebabe.gui.smalleditor.ChangelogPanel;
 import me.nov.cafebabe.gui.ui.MethodListCellRenderer;
+import me.nov.cafebabe.translations.Translations;
 
 public class Cafebabe extends WebFrame {
 	private static final long serialVersionUID = 1L;
-	private static final String title = "Cafebabe Editor Lite";
-	private static final String version = "0.0.6";
+	public static final String title = "Cafebabe Editor Lite";
+	public static final String version = "0.0.6";
 	public static Cafebabe gui;
 
 	private ClassTree tree;
@@ -57,8 +61,8 @@ public class Cafebabe extends WebFrame {
 		this.addWindowListener(new WindowAdapter() {
 			@Override
 			public void windowClosing(WindowEvent we) {
-				if (JOptionPane.showConfirmDialog(Cafebabe.this, "Do you really want to exit?", "Confirm",
-						JOptionPane.YES_NO_OPTION) == JOptionPane.YES_OPTION) {
+				if (JOptionPane.showConfirmDialog(Cafebabe.this, Translations.get("Do you really want to exit?"),
+						Translations.get("Confirm"), JOptionPane.YES_NO_OPTION) == JOptionPane.YES_OPTION) {
 					Runtime.getRuntime().exit(0);
 				}
 			}
@@ -103,8 +107,8 @@ public class Cafebabe extends WebFrame {
 		bar.setUndecorated(false);
 		bar.setMenuBarStyle(MenuBarStyle.attached);
 
-		WebMenu file = new WebMenu("File");
-		WebMenuItem load = new WebMenuItem("Open");
+		WebMenu file = new WebMenu(Translations.get("File"));
+		WebMenuItem load = new WebMenuItem(Translations.get("Open"));
 		load.addActionListener(l -> {
 			JFileChooser jfc = new JFileChooser(new File(System.getProperty("user.home") + File.separator + "Desktop"));
 			jfc.setAcceptAllFileFilterUsed(false);
@@ -115,14 +119,14 @@ public class Cafebabe extends WebFrame {
 				tree.onJarLoad(-1, input);
 			}
 		});
-		WebMenuItem save = new WebMenuItem("Save");
+		WebMenuItem save = new WebMenuItem(Translations.get("Save"));
 		save.addActionListener(l -> {
 			if (tree.inputFile == null)
 				return;
 			JFileChooser jfc = new JFileChooser(tree.inputFile.getParentFile());
 			jfc.setAcceptAllFileFilterUsed(false);
 			jfc.setSelectedFile(tree.inputFile);
-			jfc.setDialogTitle("Save");
+			jfc.setDialogTitle(Translations.get("Save"));
 			jfc.setFileFilter(new FileNameExtensionFilter("Java Package (*.jar)", "jar"));
 			int result = jfc.showSaveDialog(this);
 			if (result == JFileChooser.APPROVE_OPTION) {
@@ -133,6 +137,13 @@ public class Cafebabe extends WebFrame {
 		file.add(load);
 		file.add(save);
 		bar.add(file);
+		WebMenu preferences = new WebMenu(Translations.get("Preferences"));
+		WebMenuItem editPrefs = new WebMenuItem(Translations.get("Edit preferences..."));
+		editPrefs.addActionListener(l -> {
+			new PreferencesDialog();
+		});
+		preferences.add(editPrefs);
+		bar.add(preferences);
 		return bar;
 	}
 
@@ -156,10 +167,18 @@ public class Cafebabe extends WebFrame {
 	}
 
 	public static void main(String[] args) throws Exception {
-		UIManager.setLookAndFeel("com.sun.java.swing.plaf.nimbus.NimbusLookAndFeel");
-		WebLookAndFeel.install();
-		WebLookAndFeel.setDecorateFrames(true);
-		WebLookAndFeel.setDecorateDialogs(true);
+		try {
+			UIManager.setLookAndFeel("com.sun.java.swing.plaf.nimbus.NimbusLookAndFeel");
+			WebLookAndFeel.install();
+			WebLookAndFeel.setDecorateFrames(true);
+			WebLookAndFeel.setDecorateDialogs(true);
+			System.setProperty("file.encoding", "UTF-8");
+			Field charset = Charset.class.getDeclaredField("defaultCharset");
+			charset.setAccessible(true);
+			charset.set(null, null);
+		} catch (Throwable t) {
+			t.printStackTrace();
+		}
 		new Cafebabe();
 		gui.setVisible(true);
 	}

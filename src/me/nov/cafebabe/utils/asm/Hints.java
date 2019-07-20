@@ -1,5 +1,7 @@
 package me.nov.cafebabe.utils.asm;
 
+import me.nov.cafebabe.translations.Translations;
+
 public class Hints {
   public final static String[] hints = new String[256];
 
@@ -263,6 +265,10 @@ public class Hints {
     hints[253] = "";
     hints[254] = "(Reserved) impdep1";
     hints[255] = "(Reserved) impdp2";
+    
+    for(int i = 0; i < hints.length; i++) {
+    	hints[i] = Translations.get(hints[i]);
+    }
   }
 
 }

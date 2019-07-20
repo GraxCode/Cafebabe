@@ -30,6 +30,7 @@ import me.nov.cafebabe.gui.ClassTree;
 import me.nov.cafebabe.gui.decompiler.DecompilerPanel;
 import me.nov.cafebabe.gui.node.SortedTreeClassNode;
 import me.nov.cafebabe.gui.ui.MethodListCellRenderer;
+import me.nov.cafebabe.translations.Translations;
 import me.nov.cafebabe.utils.formatting.Colors;
 import me.nov.cafebabe.utils.ui.Listeners;
 import me.nov.cafebabe.utils.ui.WebLaF;
@@ -56,7 +57,7 @@ public class ClassEditorPanel extends JPanel {
 			if (!trim.isEmpty())
 				clazz.name = trim;
 		});
-		JLabel nameLabel = new JLabel("Name:");
+		JLabel nameLabel = new JLabel(Translations.get("Name:"));
 		nameLabel.setDisplayedMnemonic('N');
 		nameLabel.setLabelFor(name);
 
@@ -78,14 +79,14 @@ public class ClassEditorPanel extends JPanel {
 			}
 			clazz.access = acc;
 		}, true);
-		JLabel accessLabel = new JLabel("Access:");
+		JLabel accessLabel = new JLabel(Translations.get("Access:"));
 		accessLabel.setDisplayedMnemonic('A');
 		accessLabel.setLabelFor(access);
 		version = new WebComboBox(new Integer[] { 49, 50, 51, 52, 53, 54, 55, 56, 57, 58 });
 		version.addActionListener(l -> {
 			clazz.version = (int) version.getSelectedItem();
 		});
-		JLabel versionLabel = new JLabel("Version:");
+		JLabel versionLabel = new JLabel(Translations.get("Version:"));
 		versionLabel.setDisplayedMnemonic('V');
 		versionLabel.setLabelFor(version);
 
@@ -97,7 +98,7 @@ public class ClassEditorPanel extends JPanel {
 				clazz.superName = superName.getText().trim();
 			}
 		});
-		JLabel superNameLabel = new JLabel("Parent:");
+		JLabel superNameLabel = new JLabel(Translations.get("Parent:"));
 		superNameLabel.setDisplayedMnemonic('P');
 		superNameLabel.setLabelFor(superName);
 
@@ -122,7 +123,7 @@ public class ClassEditorPanel extends JPanel {
 				clazz.signature = null;
 			}
 		});
-		JLabel signatureLabel = new JLabel("Signature:");
+		JLabel signatureLabel = new JLabel(Translations.get("Signature:"));
 		signatureLabel.setDisplayedMnemonic('S');
 		signatureLabel.setLabelFor(superName);
 
@@ -135,8 +136,8 @@ public class ClassEditorPanel extends JPanel {
 				clazz.sourceFile = sf;
 			}
 		});
-		sourceFile.setToolTipText("Original name");
-		JLabel sourceFileLabel = new JLabel("Source file:");
+		sourceFile.setToolTipText(Translations.get("Original name"));
+		JLabel sourceFileLabel = new JLabel(Translations.get("Source file:"));
 		sourceFileLabel.setDisplayedMnemonic('S');
 		sourceFileLabel.setLabelFor(sourceFile);
 
@@ -151,10 +152,10 @@ public class ClassEditorPanel extends JPanel {
 				clazz.interfaces.add(itfc);
 			}
 		});
-		JLabel itfLabel = new JLabel("Interfaces:");
+		JLabel itfLabel = new JLabel(Translations.get("Interfaces:"));
 		itfLabel.setDisplayedMnemonic('I');
 		itfLabel.setLabelFor(interfaces);
-		JButton decompile = new JButton("Decompile");
+		JButton decompile = new JButton(Translations.get("Decompile"));
 		decompile.addActionListener(l -> {
 			SortedTreeClassNode treeNode = (SortedTreeClassNode) classTree.getLastSelectedPathComponent();
 			Icon icon = ((JLabel) classTree.getCellRenderer().getTreeCellRendererComponent(classTree, treeNode, false, false,
@@ -218,7 +219,7 @@ public class ClassEditorPanel extends JPanel {
 		this.add(WebLaF.createSeparator(), gbc);
 		gbc.gridy++;
 		gbc.gridwidth = 1;
-		this.add(WebLaF.createInfoLabel(itfLabel, "Separated by a comma"), gbc);
+		this.add(WebLaF.createInfoLabel(itfLabel, Translations.get("Separated by a comma")), gbc);
 		gbc.gridwidth = GridBagConstraints.REMAINDER;
 		gbc.weightx = 1;
 		this.add(interfaces, gbc);

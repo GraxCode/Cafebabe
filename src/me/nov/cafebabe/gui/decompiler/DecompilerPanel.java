@@ -21,6 +21,7 @@ import org.objectweb.asm.tree.MethodNode;
 import com.alee.laf.text.WebTextField;
 
 import me.nov.cafebabe.decompiler.CFR;
+import me.nov.cafebabe.translations.Translations;
 import me.nov.cafebabe.utils.formatting.Colors;
 
 public class DecompilerPanel extends JPanel {
@@ -46,7 +47,7 @@ public class DecompilerPanel extends JPanel {
 		for (int i = 0; i < 3; i++)
 			rs.add(new JPanel());
 		WebTextField search = new WebTextField();
-		search.setInputPrompt("Search...");
+		search.setInputPrompt(Translations.get("Search..."));
 		search.addActionListener(l -> {
 			try {
 				String text = search.getText();
@@ -89,7 +90,7 @@ public class DecompilerPanel extends JPanel {
 			}
 		});
 		rs.add(search);
-		JButton reload = new JButton("Reload");
+		JButton reload = new JButton(Translations.get("Reload"));
 		reload.addActionListener(l -> {
 			dp.setText(CFR.decompile(cn, mn));
 		});

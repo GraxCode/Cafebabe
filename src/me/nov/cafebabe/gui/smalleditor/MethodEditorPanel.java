@@ -32,6 +32,7 @@ import me.nov.cafebabe.gui.editor.InstructionPanel;
 import me.nov.cafebabe.gui.graph.CFGPanel;
 import me.nov.cafebabe.gui.node.MethodListNode;
 import me.nov.cafebabe.gui.ui.MethodListCellRenderer;
+import me.nov.cafebabe.translations.Translations;
 import me.nov.cafebabe.utils.asm.Descriptors;
 import me.nov.cafebabe.utils.formatting.Colors;
 import me.nov.cafebabe.utils.ui.Listeners;
@@ -58,7 +59,7 @@ public class MethodEditorPanel extends JPanel {
 			if (!trim.isEmpty())
 				method.name = trim;
 		});
-		JLabel nameLabel = new JLabel("Name:");
+		JLabel nameLabel = new JLabel(Translations.get("Name:"));
 		nameLabel.setDisplayedMnemonic('N');
 		nameLabel.setLabelFor(name);
 
@@ -80,7 +81,7 @@ public class MethodEditorPanel extends JPanel {
 			}
 			method.access = acc;
 		}, true);
-		JLabel accessLabel = new JLabel("Access:");
+		JLabel accessLabel = new JLabel(Translations.get("Access:"));
 		accessLabel.setDisplayedMnemonic('A');
 		accessLabel.setLabelFor(access);
 
@@ -88,7 +89,7 @@ public class MethodEditorPanel extends JPanel {
 		Listeners.addChangeListener(arguments, l -> {
 			editDesc(arguments.getText(), returns.getText());
 		});
-		JLabel argsLabel = new JLabel("Arguments:");
+		JLabel argsLabel = new JLabel(Translations.get("Arguments:"));
 		argsLabel.setDisplayedMnemonic('A');
 		argsLabel.setLabelFor(arguments);
 
@@ -96,7 +97,7 @@ public class MethodEditorPanel extends JPanel {
 		Listeners.addChangeListener(returns, l -> {
 			editDesc(arguments.getText(), returns.getText());
 		});
-		JLabel returnLabel = new JLabel("Returns:");
+		JLabel returnLabel = new JLabel(Translations.get("Returns:"));
 		returnLabel.setDisplayedMnemonic('R');
 		returnLabel.setLabelFor(returns);
 
@@ -121,7 +122,7 @@ public class MethodEditorPanel extends JPanel {
 				method.signature = null;
 			}
 		});
-		JLabel signatureLabel = new JLabel("Signature:");
+		JLabel signatureLabel = new JLabel(Translations.get("Signature:"));
 		signatureLabel.setDisplayedMnemonic('S');
 		signatureLabel.setLabelFor(returns);
 
@@ -136,11 +137,11 @@ public class MethodEditorPanel extends JPanel {
 				method.exceptions.add(exc);
 			}
 		});
-		JLabel excLabel = new JLabel("Throws:");
+		JLabel excLabel = new JLabel(Translations.get("Throws:"));
 		excLabel.setDisplayedMnemonic('T');
 		excLabel.setLabelFor(exceptions);
 
-		JButton edit = new JButton("Edit Code");
+		JButton edit = new JButton(Translations.get("Edit Code"));
 		edit.addActionListener(l -> {
 			MethodListNode mln = (MethodListNode) methodList.getLastSelectedPathComponent();
 			Icon icon = ((JLabel) methodList.getCellRenderer().getTreeCellRendererComponent(methodList, mln, false, false,
@@ -149,7 +150,7 @@ public class MethodEditorPanel extends JPanel {
 					mln.getClazz().name + "." + mln.getMethod().name, Colors.methodTabColor, icon);
 		});
 		edit.setPreferredSize(new Dimension(100, (int) edit.getPreferredSize().getHeight()));
-		JButton decompile = new JButton("Decompile");
+		JButton decompile = new JButton(Translations.get("Decompile"));
 		decompile.addActionListener(l -> {
 			MethodListNode mln = (MethodListNode) methodList.getLastSelectedPathComponent();
 			Icon icon = ((JLabel) methodList.getCellRenderer().getTreeCellRendererComponent(methodList, mln, false, false,
@@ -158,7 +159,7 @@ public class MethodEditorPanel extends JPanel {
 					mln.getClazz().name + "." + mln.getMethod().name, Colors.decompilerTabColor, icon);
 		});
 		decompile.setPreferredSize(new Dimension(100, (int) decompile.getPreferredSize().getHeight()));
-		JButton graph = new JButton("Create Graph");
+		JButton graph = new JButton(Translations.get("Create Graph"));
 		graph.addActionListener(l -> {
 			MethodListNode mln = (MethodListNode) methodList.getLastSelectedPathComponent();
 			Icon icon = ((JLabel) methodList.getCellRenderer().getTreeCellRendererComponent(methodList, mln, false, false,
@@ -215,7 +216,7 @@ public class MethodEditorPanel extends JPanel {
 
 		gbc.gridy++;
 		gbc.gridwidth = 1;
-		this.add(WebLaF.createInfoLabel(excLabel, "Separated by a comma"), gbc);
+		this.add(WebLaF.createInfoLabel(excLabel, Translations.get("Separated by a comma")), gbc);
 		gbc.gridwidth = GridBagConstraints.REMAINDER;
 		gbc.weightx = 1;
 		this.add(exceptions, gbc);

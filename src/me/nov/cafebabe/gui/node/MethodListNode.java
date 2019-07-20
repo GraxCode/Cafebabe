@@ -5,6 +5,7 @@ import javax.swing.tree.DefaultMutableTreeNode;
 import org.objectweb.asm.tree.ClassNode;
 import org.objectweb.asm.tree.MethodNode;
 
+import me.nov.cafebabe.translations.Translations;
 import me.nov.cafebabe.utils.asm.Descriptors;
 import me.nov.cafebabe.utils.formatting.EscapedString;
 
@@ -32,7 +33,7 @@ public class MethodListNode extends DefaultMutableTreeNode {
 		String[] descSplit = mn.desc.split("\\)");
 		switch (mn.name) {
 		case "<clinit>":
-			this.text += "<font color=\"#757575\"><i>class initializer method</i></font>";
+			this.text += "<font color=\"#757575\"><i>" + Translations.get("class initializer method") + "</i></font>";
 			break;
 		case "<init>":
 			this.text += " <font color=\"#757575\"><i>";

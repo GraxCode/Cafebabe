@@ -21,6 +21,7 @@ import com.alee.extended.tab.WebDocumentPane;
 import com.alee.utils.TextUtils;
 
 import me.nov.cafebabe.Cafebabe;
+import me.nov.cafebabe.translations.Translations;
 
 @SuppressWarnings({ "rawtypes", "unchecked" })
 public class Editor extends JFrame {
@@ -82,8 +83,8 @@ public class Editor extends JFrame {
 
 	private JMenuBar createMenu() {
 		JMenuBar mb = new JMenuBar();
-		JMenu actions = new JMenu("Actions");
-		JMenuItem close = new JMenuItem("Close all");
+		JMenu actions = new JMenu(Translations.get("Actions"));
+		JMenuItem close = new JMenuItem(Translations.get("Close all"));
 		close.addActionListener(l -> {
 			pane.closeAll();
 		});

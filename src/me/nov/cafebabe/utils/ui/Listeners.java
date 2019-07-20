@@ -15,6 +15,8 @@ import javax.swing.event.DocumentListener;
 import javax.swing.text.Document;
 import javax.swing.text.JTextComponent;
 
+import me.nov.cafebabe.utils.interfaces.Action;
+
 public class Listeners {
 	public static void addChangeListener(JTextComponent text, ChangeListener changeListener) {
 		Objects.requireNonNull(text);
@@ -86,9 +88,5 @@ public class Listeners {
 				addMouseReleasedListener((JComponent) child, action, true);
 			}
 		}
-	}
-
-	public static interface Action {
-		void action();
 	}
 }

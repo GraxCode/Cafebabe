@@ -1,4 +1,4 @@
-package me.nov.cafebabe.gui.opchooser;
+package me.nov.cafebabe.gui.preferences;
 
 import java.awt.BorderLayout;
 import java.awt.Dimension;
@@ -9,48 +9,39 @@ import javax.swing.JButton;
 import javax.swing.JPanel;
 import javax.swing.WindowConstants;
 
-import org.objectweb.asm.tree.AbstractInsnNode;
-
 import com.alee.laf.rootpane.WebDialog;
 
 import me.nov.cafebabe.Cafebabe;
 import me.nov.cafebabe.translations.Translations;
 
-public class OpcodeChooserDialog extends WebDialog {
+public class PreferencesDialog extends WebDialog {
 	private static final long serialVersionUID = 1L;
-	private int opcode;
-	private OpcodeChooserPane ocp;
 
-	public OpcodeChooserDialog(AbstractInsnNode ain) {
+	public PreferencesDialog() {
 		super(Cafebabe.gui, true);
 		this.setRound(5);
 		this.setShadeWidth(20);
 		this.setShowResizeCorner(false);
-		this.opcode = ain.getOpcode();
 		this.initBounds();
-		this.setTitle(Translations.get("Choose an opcode"));
+		this.setTitle(Translations.get("Preferences"));
 		this.setIconImage(Cafebabe.gui.getIconImage());
 		this.setDefaultCloseOperation(WindowConstants.DO_NOTHING_ON_CLOSE);
 		this.setLayout(new BorderLayout());
-		this.add(ocp = new OpcodeChooserPane(this, ain));
+		try {
+			this.add(new PreferencesPane());
+		} catch (Exception e1) {
+			e1.printStackTrace();
+		}
 		JPanel buttons = new JPanel(new FlowLayout(4));
 		this.add(buttons, BorderLayout.SOUTH);
 
-		JButton ok = new JButton(Translations.get("OK"));
-		buttons.add(ok);
-		ok.addActionListener(e -> {
-			setVisible(false);
-		});
-
-		JButton cancel = new JButton(Translations.get("Cancel"));
-		buttons.add(cancel);
-		cancel.addActionListener(e -> {
-			opcode = ain.getOpcode(); // reset opcode
+		JButton close = new JButton(Translations.get("Close"));
+		buttons.add(close);
+		close.addActionListener(e -> {
 			setVisible(false);
 		});
 		setLocationRelativeTo(getParent());
 		this.setVisible(true);
-
 	}
 
 	private void initBounds() {
@@ -60,17 +51,4 @@ public class OpcodeChooserDialog extends WebDialog {
 
 		setBounds(screenSize.width / 2 - width / 2, screenSize.height / 2 - height / 2, width, height);
 	}
-
-	public void setOpcode(int opcode) {
-		this.opcode = opcode;
-	}
-
-	public int getOpcode() {
-		return opcode;
-	}
-
-	public void refresh() {
-		ocp.refresh();
-	}
-
 }
