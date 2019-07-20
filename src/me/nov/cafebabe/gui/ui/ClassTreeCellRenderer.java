@@ -12,7 +12,7 @@ import javax.swing.tree.DefaultTreeCellRenderer;
 import org.objectweb.asm.Opcodes;
 import org.objectweb.asm.tree.ClassNode;
 
-import me.nov.cafebabe.gui.node.SortedTreeNode;
+import me.nov.cafebabe.gui.node.SortedTreeClassNode;
 import me.nov.cafebabe.utils.asm.Access;
 import me.nov.cafebabe.utils.ui.Images;
 
@@ -37,8 +37,8 @@ public class ClassTreeCellRenderer extends DefaultTreeCellRenderer implements Op
 			final boolean expanded, final boolean leaf, final int row, final boolean hasFocus) {
 		super.getTreeCellRendererComponent(tree, value, sel, expanded, leaf, row, hasFocus);
 		DefaultMutableTreeNode node = (DefaultMutableTreeNode) value;
-		if (node instanceof SortedTreeNode) {
-			SortedTreeNode stn = (SortedTreeNode) node;
+		if (node instanceof SortedTreeClassNode) {
+			SortedTreeClassNode stn = (SortedTreeClassNode) node;
 			ClassNode cn = stn.getClazz();
 			if (cn != null) {
 				if (Access.isInterface(cn.access)) {

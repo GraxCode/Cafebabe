@@ -26,7 +26,7 @@ import com.alee.laf.tree.WebTree;
 import com.alee.utils.ThreadUtils;
 
 import me.nov.cafebabe.Cafebabe;
-import me.nov.cafebabe.gui.node.SortedTreeNode;
+import me.nov.cafebabe.gui.node.SortedTreeClassNode;
 import me.nov.cafebabe.gui.smalleditor.ClassEditorPanel;
 import me.nov.cafebabe.gui.ui.ClassTreeCellRenderer;
 import me.nov.cafebabe.loading.FrameHack;
@@ -35,12 +35,12 @@ import me.nov.cafebabe.loading.Saver;
 import me.nov.cafebabe.utils.drop.IDropUser;
 import me.nov.cafebabe.utils.drop.JarDropHandler;
 
-public class ClassTree extends WebTree<SortedTreeNode> implements IDropUser {
+public class ClassTree extends WebTree<SortedTreeClassNode> implements IDropUser {
 	private static final long serialVersionUID = 1L;
 	private DefaultTreeModel model;
 	private HashMap<JarEntry, ClassNode> classes;
 	private Map<String, String> knownCommons; // used for frame regeneration
-	private SortedTreeNode root;
+	private SortedTreeClassNode root;
 	public File inputFile;
 
 	public ClassTree(ClassMemberList ml) {
@@ -54,7 +54,7 @@ public class ClassTree extends WebTree<SortedTreeNode> implements IDropUser {
 		this.addTreeSelectionListener(new TreeSelectionListener() {
 			@Override
 			public void valueChanged(TreeSelectionEvent e) {
-				SortedTreeNode node = (SortedTreeNode) getLastSelectedPathComponent();
+				SortedTreeClassNode node = (SortedTreeClassNode) getLastSelectedPathComponent();
 				if (node != null && node.getClazz() != null) {
 					ml.setMethods(node.getClazz());
 					Cafebabe.gui.smallEditorPanel.setViewportView(editor);
@@ -62,7 +62,7 @@ public class ClassTree extends WebTree<SortedTreeNode> implements IDropUser {
 				}
 			}
 		});
-		this.model = new DefaultTreeModel(root = new SortedTreeNode(""));
+		this.model = new DefaultTreeModel(root = new SortedTreeClassNode(""));
 		this.setModel(model);
 		this.setTransferHandler(new JarDropHandler(this, 0));
 		this.getSelectionModel().setSelectionMode(TreeSelectionModel.SINGLE_TREE_SELECTION);
@@ -136,12 +136,12 @@ public class ClassTree extends WebTree<SortedTreeNode> implements IDropUser {
 						progress.setProgress(50 + (int) (fileNum / (double) size * 50d));
 						progress.setText("Creating tree element " + e.getName());
 						String[] path = e.getName().split("/");
-						SortedTreeNode current = root;
+						SortedTreeClassNode current = root;
 						for (int i = 0; i < path.length; i++) {
-							SortedTreeNode next = null;
+							SortedTreeClassNode next = null;
 							for (int j = 0; j < current.getChildCount(); j++) {
 
-								SortedTreeNode child = (SortedTreeNode) current.getChildAt(j);
+								SortedTreeClassNode child = (SortedTreeClassNode) current.getChildAt(j);
 								if (child.getText().equals(path[i])) {
 									next = child;
 									break;
@@ -149,9 +149,9 @@ public class ClassTree extends WebTree<SortedTreeNode> implements IDropUser {
 							}
 							if (next == null) {
 								if (i + 1 >= path.length) { // last one
-									next = new SortedTreeNode(classes.get(e));
+									next = new SortedTreeClassNode(classes.get(e));
 								} else {
-									next = new SortedTreeNode(path[i]);
+									next = new SortedTreeClassNode(path[i]);
 								}
 								current.add(next);
 							}

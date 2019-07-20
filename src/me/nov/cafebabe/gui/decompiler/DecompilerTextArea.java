@@ -13,8 +13,9 @@ public class DecompilerTextArea extends RSyntaxTextArea {
 		this.setSyntaxEditingStyle("text/java");
 		this.setCodeFoldingEnabled(true);
 		this.setAntiAliasingEnabled(true);
-		this.setFont(new Font("Monospaced", Font.PLAIN, 12));
+		this.setFont(new Font(Font.MONOSPACED, Font.PLAIN, 12));
 		this.setEditable(false);
+
 		// change theme to java
 		try {
 			Theme theme = Theme.load(getClass().getResourceAsStream("/org/fife/ui/rsyntaxtextarea/themes/eclipse.xml"));

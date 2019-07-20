@@ -11,6 +11,7 @@ import java.util.ArrayList;
 
 import javax.swing.BorderFactory;
 import javax.swing.Box;
+import javax.swing.Icon;
 import javax.swing.JButton;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
@@ -24,8 +25,12 @@ import com.alee.laf.checkbox.WebCheckBox;
 import com.alee.laf.combobox.WebComboBox;
 import com.alee.laf.text.WebTextField;
 
+import me.nov.cafebabe.Cafebabe;
 import me.nov.cafebabe.gui.ClassTree;
+import me.nov.cafebabe.gui.decompiler.DecompilerPanel;
+import me.nov.cafebabe.gui.node.SortedTreeClassNode;
 import me.nov.cafebabe.gui.ui.MethodListCellRenderer;
+import me.nov.cafebabe.utils.formatting.Colors;
 import me.nov.cafebabe.utils.ui.Listeners;
 import me.nov.cafebabe.utils.ui.WebLaF;
 
@@ -150,6 +155,13 @@ public class ClassEditorPanel extends JPanel {
 		itfLabel.setDisplayedMnemonic('I');
 		itfLabel.setLabelFor(interfaces);
 		JButton decompile = new JButton("Decompile");
+		decompile.addActionListener(l -> {
+			SortedTreeClassNode treeNode = (SortedTreeClassNode) classTree.getLastSelectedPathComponent();
+			Icon icon = ((JLabel) classTree.getCellRenderer().getTreeCellRendererComponent(classTree, treeNode, false, false,
+					true, 0, false)).getIcon();
+			Cafebabe.gui.openEditor(new DecompilerPanel(treeNode.getClazz(), null), treeNode.getClazz().name,
+					Colors.decompilerTabColor, icon);
+		});
 		decompile.setPreferredSize(new Dimension(100, (int) decompile.getPreferredSize().getHeight()));
 
 		GridBagConstraints gbc = new GridBagConstraints();

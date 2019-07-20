@@ -9,18 +9,18 @@ import org.objectweb.asm.tree.ClassNode;
 
 import me.nov.cafebabe.utils.formatting.EscapedString;
 
-public class SortedTreeNode extends DefaultMutableTreeNode {
+public class SortedTreeClassNode extends DefaultMutableTreeNode {
 	private static final long serialVersionUID = 1L;
 
 	private ClassNode cn;
 	private EscapedString text;
 
-	public SortedTreeNode(ClassNode cn) {
+	public SortedTreeClassNode(ClassNode cn) {
 		this.cn = cn;
 		setClassName();
 	}
 
-	public SortedTreeNode(String path) {
+	public SortedTreeClassNode(String path) {
 		this.cn = null;
 		this.text = new EscapedString(path);
 	}
@@ -46,10 +46,10 @@ public class SortedTreeNode extends DefaultMutableTreeNode {
 			Collections.sort(children, comparator());
 	}
 
-	private Comparator<SortedTreeNode> comparator() {
-		return new Comparator<SortedTreeNode>() {
+	private Comparator<SortedTreeClassNode> comparator() {
+		return new Comparator<SortedTreeClassNode>() {
 			@Override
-			public int compare(SortedTreeNode node1, SortedTreeNode node2) {
+			public int compare(SortedTreeClassNode node1, SortedTreeClassNode node2) {
 				boolean leaf1 = node1.cn != null;
 				boolean leaf2 = node2.cn != null;
 
