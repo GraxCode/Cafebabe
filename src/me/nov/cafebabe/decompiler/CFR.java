@@ -1,32 +1,25 @@
 package me.nov.cafebabe.decompiler;
 
-import java.io.ByteArrayOutputStream;
 import java.io.IOException;
-import java.io.InputStream;
 import java.io.PrintWriter;
 import java.io.StringWriter;
-import java.lang.reflect.Field;
+import java.util.Arrays;
 import java.util.Collection;
+import java.util.Collections;
 import java.util.HashMap;
-import java.util.Map;
+import java.util.List;
+import java.util.function.Consumer;
 
-import org.benf.cfr.reader.PluginRunner;
+import org.benf.cfr.reader.api.CfrDriver;
+import org.benf.cfr.reader.api.OutputSinkFactory;
+import org.benf.cfr.reader.api.SinkReturns;
 import org.benf.cfr.reader.apiunreleased.ClassFileSource2;
 import org.benf.cfr.reader.apiunreleased.JarContent;
 import org.benf.cfr.reader.bytecode.analysis.parse.utils.Pair;
-import org.benf.cfr.reader.entities.ClassFile;
-import org.benf.cfr.reader.entities.Method;
-import org.benf.cfr.reader.entities.constantpool.ConstantPool;
-import org.benf.cfr.reader.state.ClassFileSourceImpl;
-import org.benf.cfr.reader.state.DCCommonState;
-import org.benf.cfr.reader.util.bytestream.BaseByteData;
-import org.benf.cfr.reader.util.getopt.OptionsImpl;
-import org.benf.cfr.reader.util.output.ToStringDumper;
 import org.objectweb.asm.ClassWriter;
 import org.objectweb.asm.tree.ClassNode;
 import org.objectweb.asm.tree.MethodNode;
 
-@SuppressWarnings("deprecation")
 public class CFR {
 
 	public static final HashMap<String, String> options = new HashMap<>();
@@ -101,15 +94,44 @@ public class CFR {
 		options.put("usenametable", "true");
 	}
 
+	private static String decompiled;
+
 	public static String decompile(ClassNode cn, MethodNode mn) {
 		try {
 			ClassWriter cw = new ClassWriter(ClassWriter.COMPUTE_MAXS); // ignore frames
 			cn.accept(cw);
 			byte[] b = cw.toByteArray();
-			HashMap<String, String> ops = new HashMap<>();
-			ops.put("comments", "false");
-			ClassFileSource2 cfs = new ClassFileSource2() {
+			decompiled = null;
+			OutputSinkFactory mySink = new OutputSinkFactory() {
+				@Override
+				public List<SinkClass> getSupportedSinks(SinkType sinkType, Collection<SinkClass> collection) {
+					if (sinkType == SinkType.JAVA && collection.contains(SinkClass.DECOMPILED)) {
+						return Arrays.asList(SinkClass.DECOMPILED, SinkClass.STRING);
+					} else {
+						return Collections.singletonList(SinkClass.STRING);
+					}
+				}
 
+				Consumer<SinkReturns.Decompiled> dumpDecompiled = d -> {
+					decompiled = d.getJava().substring(31); //remove watermark
+				};
+
+				@Override
+				public <T> Sink<T> getSink(SinkType sinkType, SinkClass sinkClass) {
+					if (sinkType == SinkType.JAVA && sinkClass == SinkClass.DECOMPILED) {
+						return x -> dumpDecompiled.accept((SinkReturns.Decompiled) x);
+					}
+					return ignore -> {
+					};
+				}
+			};
+			options.put("analyseas", "CLASS");
+			if (mn != null) {
+				options.put("methodname", mn.name);
+			} else {
+				options.remove("methodname");
+			}
+			ClassFileSource2 cfs2 = new ClassFileSource2() {
 				@Override
 				public void informAnalysisRelativePathDetail(String a, String b) {
 				}
@@ -125,7 +147,11 @@ public class CFR {
 					if (name.equals(cn.name)) {
 						return Pair.make(b, name);
 					}
-					return null; // cfr loads unnecessary classes
+					ClassNode dummy = new ClassNode();
+					dummy.name = name;
+					ClassWriter cw = new ClassWriter(ClassWriter.COMPUTE_MAXS);
+					dummy.accept(cw);
+					return Pair.make(cw.toByteArray(), name); // cfr loads unnecessary classes
 				}
 
 				@Override
@@ -138,26 +164,9 @@ public class CFR {
 					return null;
 				}
 			};
-			PluginRunner runner = new PluginRunner(ops, cfs);
-			if (mn != null) {
-				BaseByteData data = new BaseByteData(b);
-				ClassFile cf = new ClassFile(data, "", initDCState(ops, cfs));
-				Field cpf = Method.class.getDeclaredField("cp");
-				Field descI = Method.class.getDeclaredField("descriptorIndex");
-				descI.setAccessible(true);
-				cpf.setAccessible(true);
-				for (Method m : cf.getMethodByName(mn.name)) {
-					ConstantPool cp = (ConstantPool) cpf.get(m);
-					if (cp.getUTF8Entry(descI.getInt(m)).getValue().equals(mn.desc)) {
-						ToStringDumper tsd = new ToStringDumper();
-						m.dump(tsd, true);
-						return tsd.toString();
-					}
-				}
-			}
-			String decompilation = runner.getDecompilationFor(cn.name);
-			System.gc();
-			return decompilation.substring(37); // remove watermark
+			CfrDriver cfrDriver = new CfrDriver.Builder().withClassFileSource(cfs2).withOutputSink(mySink)
+					.withOptions(options).build();
+			cfrDriver.analyse(Arrays.asList(cn.name));
 		} catch (Exception e) {
 			e.printStackTrace();
 			StringWriter sw = new StringWriter();
@@ -165,27 +174,6 @@ public class CFR {
 			e.printStackTrace(pw);
 			return sw.toString();
 		}
-	}
-
-	private static DCCommonState initDCState(Map<String, String> optionsMap, ClassFileSource2 classFileSource) {
-		OptionsImpl options = new OptionsImpl(optionsMap);
-		if (classFileSource == null)
-			classFileSource = new ClassFileSourceImpl(options);
-		DCCommonState dcCommonState = new DCCommonState(options, (ClassFileSource2) classFileSource);
-		return dcCommonState;
-	}
-
-	protected Pair<byte[], String> getSystemClass(String name, String path) throws IOException {
-		InputStream is = ClassLoader.getSystemClassLoader().getResourceAsStream(path);
-		if (is != null) {
-			ByteArrayOutputStream baos = new ByteArrayOutputStream();
-			byte[] buffer = new byte[4096];
-			int n;
-			while ((n = is.read(buffer)) > 0) {
-				baos.write(buffer, 0, n);
-			}
-			return Pair.make(baos.toByteArray(), name);
-		}
-		return null;
+		return decompiled;
 	}
 }
