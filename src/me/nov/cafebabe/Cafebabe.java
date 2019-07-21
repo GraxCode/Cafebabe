@@ -40,6 +40,7 @@ import me.nov.cafebabe.gui.editor.Editor;
 import me.nov.cafebabe.gui.preferences.PreferencesDialog;
 import me.nov.cafebabe.gui.smalleditor.ChangelogPanel;
 import me.nov.cafebabe.gui.ui.MethodListCellRenderer;
+import me.nov.cafebabe.setting.Settings;
 import me.nov.cafebabe.translations.Translations;
 
 public class Cafebabe extends WebFrame {
@@ -176,6 +177,7 @@ public class Cafebabe extends WebFrame {
 			Field charset = Charset.class.getDeclaredField("defaultCharset");
 			charset.setAccessible(true);
 			charset.set(null, null);
+			Settings.loadSettings();
 		} catch (Throwable t) {
 			t.printStackTrace();
 		}

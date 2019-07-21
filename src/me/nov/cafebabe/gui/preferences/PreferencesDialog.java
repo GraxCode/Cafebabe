@@ -25,7 +25,7 @@ public class PreferencesDialog extends WebDialog {
 		this.initBounds();
 		this.setTitle(Translations.get("Preferences"));
 		this.setIconImage(Cafebabe.gui.getIconImage());
-		this.setDefaultCloseOperation(WindowConstants.DO_NOTHING_ON_CLOSE);
+		this.setDefaultCloseOperation(WindowConstants.DISPOSE_ON_CLOSE);
 		this.setLayout(new BorderLayout());
 		try {
 			this.add(new PreferencesPane());

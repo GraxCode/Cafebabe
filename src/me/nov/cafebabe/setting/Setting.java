@@ -2,8 +2,6 @@ package me.nov.cafebabe.setting;
 
 import java.lang.reflect.Field;
 
-import javax.swing.SwingUtilities;
-
 import me.nov.cafebabe.translations.Translations;
 import me.nov.cafebabe.utils.interfaces.Action;
 
@@ -25,16 +23,30 @@ public class Setting {
 		this.updateAction = updateAction;
 	}
 
-	public void set(boolean b) {
-		// TODO save settings
+	public void setInitial(boolean b) {
 		try {
 			field.setBoolean(null, b);
-			SwingUtilities.invokeLater(() -> {
-				if (updateAction != null) {
-					updateAction.action();
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+	}
+
+	public void set(boolean b) {
+		try {
+			field.setBoolean(null, b);
+			Settings.saveProperties();
+			new Thread(() -> {
+				try {
+					// call later to update ui
+					Thread.sleep(500);
+					if (updateAction != null) {
+						updateAction.action();
+					}
+				} catch (Exception e) {
+					e.printStackTrace();
 				}
-			});
-		} catch (IllegalArgumentException | IllegalAccessException e) {
+			}).start();
+		} catch (Exception e) {
 			e.printStackTrace();
 		}
 	}
@@ -42,7 +54,7 @@ public class Setting {
 	public boolean get() {
 		try {
 			return field.getBoolean(null);
-		} catch (IllegalArgumentException | IllegalAccessException e) {
+		} catch (Exception e) {
 			e.printStackTrace();
 			return defaultValue;
 		}

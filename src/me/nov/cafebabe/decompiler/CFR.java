@@ -31,6 +31,17 @@ public class CFR {
 
 	public static final HashMap<String, String> options = new HashMap<>();
 
+	public static boolean stringBuilders;
+	public static boolean stringSwitches;
+	public static boolean tryWith;
+	public static boolean lambdas;
+	public static boolean finallies;
+	public static boolean hideLongStrings;
+	public static boolean hideUTF8;
+	public static boolean removeSynthetic;
+	public static boolean commentMonitors;
+	public static boolean topsort;
+	public static boolean ignoreExcpetions;
 	static {
 		options.put("aexagg", "false");
 		options.put("allowcorrecting", "true");
@@ -40,22 +51,23 @@ public class CFR {
 		options.put("collectioniter", "true");
 		options.put("commentmonitors", "false");
 		options.put("decodeenumswitch", "true");
-		options.put("decodefinally", "true");
-		options.put("decodelambdas", "true");
-		options.put("decodestringswitch", "true");
+		options.put("decodefinally", String.valueOf(finallies));
+		options.put("decodelambdas", String.valueOf(lambdas));
+		options.put("decodestringswitch", String.valueOf(stringSwitches));
 		options.put("dumpclasspath", "false");
 		options.put("eclipse", "true");
 		options.put("elidescala", "false");
 		options.put("forcecondpropagate", "false");
 		options.put("forceexceptionprune", "false");
 		options.put("forcereturningifs", "false");
-		options.put("forcetopsort", "false");
-		options.put("forcetopsortaggress", "false");
+		options.put("forcetopsort", String.valueOf(topsort));
+		options.put("forcetopsortaggress", String.valueOf(topsort));
 		options.put("forloopaggcapture", "false");
 		options.put("hidebridgemethods", "true");
 		options.put("hidelangimports", "true");
-		options.put("hidelongstrings", "false");
-		options.put("hideutf", "false");
+		options.put("hidelongstrings", String.valueOf(hideLongStrings));
+		options.put("hideutf", String.valueOf(hideUTF8));
+		options.put("ignoreexceptionsalways", String.valueOf(ignoreExcpetions));
 		options.put("innerclasses", "true");
 		options.put("j14classobj", "false");
 		options.put("labelledblocks", "true");
@@ -70,19 +82,22 @@ public class CFR {
 		options.put("removebadgenerics", "true");
 		options.put("removeboilerplate", "true");
 		options.put("removedeadmethods", "true");
-		options.put("removeinnerclasssynthetics", "true");
+		options.put("removeinnerclasssynthetics", String.valueOf(removeSynthetic));
 		options.put("rename", "false");
 		options.put("renamedupmembers", "false");
 		options.put("renameenumidents", "false");
 		options.put("renameillegalidents", "false");
 		options.put("showinferrable", "false");
+		options.put("showversion", "false");
 		options.put("silent", "false");
-		options.put("stringbuffer", "false");
-		options.put("stringbuilder", "true");
+		options.put("stringbuffer", String.valueOf(stringBuilders));
+		options.put("stringbuilder", String.valueOf(stringBuilders));
 		options.put("sugarasserts", "true");
 		options.put("sugarboxing", "true");
 		options.put("sugarenums", "true");
 		options.put("tidymonitors", "true");
+		options.put("commentmonitors", String.valueOf(commentMonitors));
+		options.put("tryresources", String.valueOf(tryWith));
 		options.put("usenametable", "true");
 	}
 
