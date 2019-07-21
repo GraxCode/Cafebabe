@@ -23,6 +23,7 @@ import javax.swing.JOptionPane;
 import javax.swing.JScrollPane;
 import javax.swing.KeyStroke;
 import javax.swing.UIManager;
+import javax.swing.UIManager.LookAndFeelInfo;
 import javax.swing.filechooser.FileNameExtensionFilter;
 
 import com.alee.laf.WebLookAndFeel;
@@ -183,7 +184,12 @@ public class Cafebabe extends WebFrame {
 			if (!folder.exists()) {
 				folder.mkdir();
 			}
-			UIManager.setLookAndFeel("com.sun.java.swing.plaf.nimbus.NimbusLookAndFeel");
+			for(LookAndFeelInfo lafi : UIManager.getInstalledLookAndFeels()) {
+				if(lafi.getName().equals("Nimbus")) {
+					UIManager.setLookAndFeel(lafi.getClassName());
+					break;
+				}
+			}
 			WebLookAndFeel.install();
 			WebLookAndFeel.setDecorateFrames(true);
 			WebLookAndFeel.setDecorateDialogs(true);
