@@ -125,7 +125,7 @@ public class ClassTree extends WebTree<SortedTreeClassNode> implements IDropUser
 								FrameHack.findCommonParents(knownCommons, cn); // preload common super classes for frame regeneration
 								classes.put(entry, cn);
 							}
-						} catch (IOException e) {
+						} catch (Exception e) {
 							e.printStackTrace();
 						}
 						fileNum++;

@@ -16,7 +16,6 @@ import me.nov.cafebabe.decompiler.CFR;
 import me.nov.cafebabe.translations.Translations;
 
 public class Settings {
-	public static File propFolder;
 	public static File propertiesFile;
 	public static Properties properties;
 
@@ -29,7 +28,7 @@ public class Settings {
 	 */
 	public static void loadSettings() throws Exception {
 		settings.put("General",
-				Arrays.asList(new Setting("autotranslate", "Translate", "Automatic translation via Google Translate API",
+				Arrays.asList(new Setting("translate", "Translations", "Use translations stored in %userprofile%/.cafebabe/translations",
 						Translations.class.getDeclaredField("translate"), false, () -> {
 							if (JOptionPane.showConfirmDialog(Cafebabe.gui,
 									Translations.get("Do you want to restart now? Everything unsaved will be lost!"),
@@ -86,11 +85,7 @@ public class Settings {
 
 	private static void initProperties() {
 		// init folders and stuff
-		propFolder = new File(System.getProperty("user.home"), ".cafebabe");
-		if (!propFolder.exists()) {
-			propFolder.mkdir();
-		}
-		propertiesFile = new File(propFolder, "cafebabe.properties");
+		propertiesFile = new File(Cafebabe.folder, "cafebabe.properties");
 
 		properties = new Properties();
 		if (propertiesFile.exists()) {

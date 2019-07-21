@@ -21,6 +21,7 @@ import javax.swing.JFrame;
 import javax.swing.JMenuBar;
 import javax.swing.JOptionPane;
 import javax.swing.JScrollPane;
+import javax.swing.KeyStroke;
 import javax.swing.UIManager;
 import javax.swing.filechooser.FileNameExtensionFilter;
 
@@ -39,6 +40,7 @@ import me.nov.cafebabe.gui.OuterSplitPane;
 import me.nov.cafebabe.gui.editor.Editor;
 import me.nov.cafebabe.gui.preferences.PreferencesDialog;
 import me.nov.cafebabe.gui.smalleditor.ChangelogPanel;
+import me.nov.cafebabe.gui.translations.TranslationEditor;
 import me.nov.cafebabe.gui.ui.MethodListCellRenderer;
 import me.nov.cafebabe.setting.Settings;
 import me.nov.cafebabe.translations.Translations;
@@ -48,6 +50,7 @@ public class Cafebabe extends WebFrame {
 	public static final String title = "Cafebabe Editor Lite";
 	public static final String version = "0.0.6";
 	public static Cafebabe gui;
+	public static File folder;
 
 	private ClassTree tree;
 	private ClassMemberList methods;
@@ -110,6 +113,7 @@ public class Cafebabe extends WebFrame {
 
 		WebMenu file = new WebMenu(Translations.get("File"));
 		WebMenuItem load = new WebMenuItem(Translations.get("Open jar file"));
+		load.setAccelerator(KeyStroke.getKeyStroke('N', Toolkit.getDefaultToolkit().getMenuShortcutKeyMask()));
 		load.addActionListener(l -> {
 			JFileChooser jfc = new JFileChooser(new File(System.getProperty("user.home") + File.separator + "Desktop"));
 			jfc.setAcceptAllFileFilterUsed(false);
@@ -121,6 +125,7 @@ public class Cafebabe extends WebFrame {
 			}
 		});
 		WebMenuItem save = new WebMenuItem(Translations.get("Save jar file"));
+		save.setAccelerator(KeyStroke.getKeyStroke('S', Toolkit.getDefaultToolkit().getMenuShortcutKeyMask()));
 		save.addActionListener(l -> {
 			if (tree.inputFile == null)
 				return;
@@ -144,6 +149,11 @@ public class Cafebabe extends WebFrame {
 			new PreferencesDialog();
 		});
 		preferences.add(editPrefs);
+		WebMenuItem tranlations = new WebMenuItem(Translations.get("Translation editor..."));
+		tranlations.addActionListener(l -> {
+			new TranslationEditor();
+		});
+		preferences.add(tranlations);
 		bar.add(preferences);
 		return bar;
 	}
@@ -169,6 +179,10 @@ public class Cafebabe extends WebFrame {
 
 	public static void main(String[] args) throws Exception {
 		try {
+			folder = new File(System.getProperty("user.home"), ".cafebabe");
+			if (!folder.exists()) {
+				folder.mkdir();
+			}
 			UIManager.setLookAndFeel("com.sun.java.swing.plaf.nimbus.NimbusLookAndFeel");
 			WebLookAndFeel.install();
 			WebLookAndFeel.setDecorateFrames(true);
