@@ -37,6 +37,9 @@ public class LibClassWriter extends ClassWriter {
 		if (knownCommons.containsKey(type1 + ":" + type2)) {
 			return knownCommons.get(type1 + ":" + type2);
 		}
+		if (type1.length() <= 1 || type2.length() <= 1) {
+			return "java/lang/Object";
+		}
 		if (type1.equals("java/lang/Object") || type2.equals("java/lang/Object")) {
 			return "java/lang/Object";
 		}
@@ -70,8 +73,9 @@ public class LibClassWriter extends ClassWriter {
 			Dimension screenSize = Toolkit.getDefaultToolkit().getScreenSize();
 			dummy.setLocation(screenSize.width / 2, screenSize.height / 2);
 			dummy.setAlwaysOnTop(true);
-			String superclass = JOptionPane.showInputDialog(dummy, Translations.get("What is the common super class of") + " "
-					+ type1 + " " + Translations.get("and") + " " + type2, "java/lang/Object");
+			String superclass = JOptionPane.showInputDialog(dummy,
+					Translations.get("Please enter a common super class of those classes:") + " " + type1 + " " + type2,
+					"java/lang/Object");
 			dummy.dispose();
 			if (superclass == null || superclass.isEmpty()) {
 				return "java/lang/Object";
