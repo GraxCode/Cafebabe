@@ -6,6 +6,9 @@ public class EscapedString {
 
 	public EscapedString(String text) {
 		super();
+		if(text == null) {
+			text = "";
+		}
 		this.text = text;
 		if (text.length() > 127) {
 			text = text.substring(0, 124) + "...";

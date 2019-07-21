@@ -2,6 +2,7 @@ package me.nov.cafebabe.utils.formatting;
 
 import org.objectweb.asm.tree.AbstractInsnNode;
 import org.objectweb.asm.tree.FieldInsnNode;
+import org.objectweb.asm.tree.IntInsnNode;
 import org.objectweb.asm.tree.JumpInsnNode;
 import org.objectweb.asm.tree.LdcInsnNode;
 import org.objectweb.asm.tree.LineNumberNode;
@@ -69,6 +70,9 @@ public class InstructionFormatting {
 				sb.append(" ");
 				sb.append(ldc.cst.toString());
 			}
+			break;
+		case AbstractInsnNode.INT_INSN:
+			sb.append(((IntInsnNode) ain).operand);
 		}
 		return sb.toString();
 	}
