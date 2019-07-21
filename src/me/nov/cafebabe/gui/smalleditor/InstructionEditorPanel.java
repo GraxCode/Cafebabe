@@ -16,9 +16,11 @@ import javax.swing.event.ChangeListener;
 
 import org.objectweb.asm.Opcodes;
 import org.objectweb.asm.tree.AbstractInsnNode;
+import org.objectweb.asm.tree.LdcInsnNode;
 import org.objectweb.asm.tree.MethodNode;
 
 import com.alee.laf.checkbox.WebCheckBox;
+import com.alee.laf.combobox.WebComboBox;
 import com.alee.laf.label.WebLabel;
 import com.alee.laf.spinner.WebSpinner;
 import com.alee.laf.text.WebTextField;
@@ -93,6 +95,9 @@ public class InstructionEditorPanel extends JPanel implements Opcodes {
 		try {
 			Object value = f.get(ain);
 			int type = ain.getType();
+			if (type == AbstractInsnNode.LDC_INSN) {
+				return createLdcEditor(il,(LdcInsnNode) ain ,f);
+			}
 			if (name.equals("desc")) {
 				if (type == AbstractInsnNode.METHOD_INSN) {
 					return createInOutDescEditor(il, ain, f, value);
@@ -132,6 +137,30 @@ public class InstructionEditorPanel extends JPanel implements Opcodes {
 		return new JLabel("<html><i>not editable yet...");
 	}
 
+	private Component createLdcEditor(InstructionList il, LdcInsnNode ain, Field f) {
+		String[] items = { "String", "Integer", "Float", "Long", "Double", "Type", "Handle", "ConstantDynamic" };
+
+		WebComboBox wcb = new WebComboBox(items);
+		wcb.setSelectedItem(ain.cst.getClass().getSimpleName());
+		JPanel panel = new JPanel();
+		panel.setLayout(new BorderLayout());
+		panel.add(wcb, BorderLayout.WEST);
+		WebTextField field = new WebTextField(ain.cst.toString());
+		
+		field.setInputPrompt("only String supported yet..");
+		wcb.setEnabled(false);
+		field.setEnabled(ain.cst.getClass().getSimpleName().equals("String"));
+		Listeners.addChangeListener(field, c -> {
+			setField(f, ain, field.getText().trim());
+			il.repaint();
+		});
+		panel.add(field, BorderLayout.CENTER);
+		return panel;
+	}
+
+	/*
+	 * if (cst instanceof Integer) { // ... } else if (cst instanceof Float) { // ... } else if (cst instanceof Long) { // ... } else if (cst instanceof Double) { // ... } else if (cst instanceof String) { // ... } else if (cst instanceof Type) { int sort = ((Type) cst).getSort(); if (sort == Type.OBJECT) { // ... } else if (sort == Type.ARRAY) { // ... } else if (sort == Type.METHOD) { // ... } else { // throw an exception } } else if (cst instanceof Handle) { // ... } else if (cst instanceof ConstantDynamic) { // ... } else { // throw an exception }
+	 */
 	private void setField(Field f, AbstractInsnNode ain, Object object) {
 		// to avoid try catch blocks all the time..
 		try {

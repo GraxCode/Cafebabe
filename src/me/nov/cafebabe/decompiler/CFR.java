@@ -113,7 +113,10 @@ public class CFR {
 				}
 
 				Consumer<SinkReturns.Decompiled> dumpDecompiled = d -> {
-					decompiled = d.getJava().substring(31); //remove watermark
+					decompiled = d.getJava();
+					if(mn == null) {
+						decompiled = decompiled.substring(31); //remove watermark
+					}
 				};
 
 				@Override

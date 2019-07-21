@@ -1,6 +1,10 @@
 <html>
 <h1>Changelog</hl>
 <hr>
+<h2>Version 0.1.0</h2>
+<p>Fully implemented the decompiler and some code-editing. Also made a new editor for translations, that you can use to make your own (or even for everybody)! You can also change cfr settings from the preferences page.</p>
+<br>
+<hr>
 <h2>Version 0.0.6</h2>
 <p>Added the old control flow graph, cfr decompiler and exit confirmation.</p>
 <br>

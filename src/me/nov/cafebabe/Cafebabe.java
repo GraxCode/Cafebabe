@@ -48,7 +48,7 @@ import me.nov.cafebabe.translations.Translations;
 public class Cafebabe extends WebFrame {
 	private static final long serialVersionUID = 1L;
 	public static final String title = "Cafebabe Editor Lite";
-	public static final String version = "0.0.6";
+	public static final String version = "0.1.0";
 	public static Cafebabe gui;
 	public static File folder;
 
