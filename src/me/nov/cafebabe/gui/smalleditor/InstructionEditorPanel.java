@@ -5,8 +5,6 @@ import java.awt.Component;
 import java.awt.GridBagConstraints;
 import java.awt.GridBagLayout;
 import java.awt.Insets;
-import java.awt.event.MouseEvent;
-import java.awt.event.MouseListener;
 import java.lang.reflect.Field;
 import java.lang.reflect.Modifier;
 
@@ -45,38 +43,19 @@ public class InstructionEditorPanel extends JPanel implements Opcodes {
 		WebLabel opcode = new WebLabel(WebLabel.CENTER);
 		opcode.setText("<html>" + Html.color(Colors.getColor(ain.getType(), ain.getOpcode()),
 				Html.bold(OpcodeFormatting.getOpcodeText(ain.getOpcode()).toLowerCase())));
-		opcode.addMouseListener(new MouseListener() {
-			@Override
-			public void mouseReleased(MouseEvent e) {
-			}
-
-			@Override
-			public void mousePressed(MouseEvent e) {
-			}
-
-			@Override
-			public void mouseExited(MouseEvent e) {
-			}
-
-			@Override
-			public void mouseEntered(MouseEvent e) {
-			}
-
-			@Override
-			public void mouseClicked(MouseEvent e) {
-				int newOp = new OpcodeChooserDialog(ain).getOpcode();
-				if (newOp != ain.getOpcode()) {
-					if (OpcodeLink.getOpcodeNode(newOp).getName().equals(ain.getClass().getName())) {
-						opcode.setText("<html>" + Html.color(Colors.getColor(ain.getType(), newOp),
-								Html.bold(OpcodeFormatting.getOpcodeText(newOp).toLowerCase())));
-						ain.setOpcode(newOp);
-						instructionList.repaint();
-					} else {
-						throw new RuntimeException("unimplemented");
-					}
+		Listeners.addMouseReleasedListener(opcode, () -> {
+			int newOp = new OpcodeChooserDialog(ain).getOpcode();
+			if (newOp != ain.getOpcode()) {
+				if (OpcodeLink.getOpcodeNode(newOp).getName().equals(ain.getClass().getName())) {
+					opcode.setText("<html>" + Html.color(Colors.getColor(ain.getType(), newOp),
+							Html.bold(OpcodeFormatting.getOpcodeText(newOp).toLowerCase())));
+					ain.setOpcode(newOp);
+					instructionList.repaint();
+				} else {
+					throw new RuntimeException("unimplemented");
 				}
 			}
-		});
+		}, false);
 		JLabel opcodeLabel = new JLabel("Opcode:");
 		opcodeLabel.setDisplayedMnemonic('O');
 		opcodeLabel.setLabelFor(opcode);

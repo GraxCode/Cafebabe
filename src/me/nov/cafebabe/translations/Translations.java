@@ -15,6 +15,7 @@ public class Translations {
 	public static boolean translate = false;
 
 	public static String get(String i) {
+		// TODO use premade translations with ids and default text (i)
 		if (!translate) {
 			return i;
 		}

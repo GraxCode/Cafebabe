@@ -109,7 +109,7 @@ public class Cafebabe extends WebFrame {
 		bar.setMenuBarStyle(MenuBarStyle.attached);
 
 		WebMenu file = new WebMenu(Translations.get("File"));
-		WebMenuItem load = new WebMenuItem(Translations.get("Open"));
+		WebMenuItem load = new WebMenuItem(Translations.get("Open jar file"));
 		load.addActionListener(l -> {
 			JFileChooser jfc = new JFileChooser(new File(System.getProperty("user.home") + File.separator + "Desktop"));
 			jfc.setAcceptAllFileFilterUsed(false);
@@ -120,14 +120,14 @@ public class Cafebabe extends WebFrame {
 				tree.onJarLoad(-1, input);
 			}
 		});
-		WebMenuItem save = new WebMenuItem(Translations.get("Save"));
+		WebMenuItem save = new WebMenuItem(Translations.get("Save jar file"));
 		save.addActionListener(l -> {
 			if (tree.inputFile == null)
 				return;
 			JFileChooser jfc = new JFileChooser(tree.inputFile.getParentFile());
 			jfc.setAcceptAllFileFilterUsed(false);
 			jfc.setSelectedFile(tree.inputFile);
-			jfc.setDialogTitle(Translations.get("Save"));
+			jfc.setDialogTitle(Translations.get("Save jar file"));
 			jfc.setFileFilter(new FileNameExtensionFilter("Java Package (*.jar)", "jar"));
 			int result = jfc.showSaveDialog(this);
 			if (result == JFileChooser.APPROVE_OPTION) {
