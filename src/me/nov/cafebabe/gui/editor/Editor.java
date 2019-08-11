@@ -34,6 +34,7 @@ public class Editor extends JFrame {
 		this.setIconImage(Cafebabe.gui.getIconImage());
 		this.setDefaultCloseOperation(WindowConstants.HIDE_ON_CLOSE);
 		this.setLayout(new BorderLayout());
+		this.setAlwaysOnTop(true);
 		this.pane = new WebDocumentPane();
 		pane.setCloseable(true);
 		pane.setTabMenuEnabled(true);
