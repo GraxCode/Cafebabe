@@ -25,8 +25,6 @@ public class OpList extends JList<OpcodeNode> {
 			llm.addElement(new OpcodeNode(opcode));
 		}
 		this.setModel(llm);
-		this.refresh();
-		this.repaint();
 		for (MouseListener ml : this.getMouseListeners())
 			this.removeMouseListener(ml);
 		this.addMouseListener(new MouseAdapter() {
@@ -43,16 +41,19 @@ public class OpList extends JList<OpcodeNode> {
 
 	}
 
-	public void refresh() {
+	public boolean refresh() {
 		clearSelection();
 		int i = 0;
 		if (opcodes != null)
 			for (int opcode : opcodes) {
 				if (chooser.getOpcode() == opcode) {
 					setSelectedIndex(i);
+					super.repaint();
+					return true;
 				}
 				i++;
 			}
 		super.repaint();
+		return false;
 	}
 }

@@ -46,6 +46,7 @@ public class OpcodeChooserPane extends WebTabbedPane implements Opcodes {
 				CALOAD, SALOAD, IASTORE, LASTORE, FASTORE, DASTORE, AASTORE, BASTORE, CASTORE, SASTORE))));
 		this.addTab(Translations.get("Other"), new JScrollPane(
 				addList(new OpList(chooser, TABLESWITCH, LOOKUPSWITCH, MONITORENTER, MONITOREXIT, IINC, NOP, JSR, RET))));
+		this.refresh();
 	}
 
 	private OpList addList(OpList opList) {
@@ -54,8 +55,11 @@ public class OpcodeChooserPane extends WebTabbedPane implements Opcodes {
 	}
 
 	public void refresh() {
-		for (OpList ol : lists) {
-			ol.refresh();
+		for (int i = 0; i < lists.size(); i++) {
+			OpList ol = lists.get(i);
+			if(ol.refresh()) {
+				setSelectedIndex(i);
+			}
 		}
 	}
 
