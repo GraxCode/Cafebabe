@@ -39,7 +39,6 @@ public class Editor extends JFrame {
 		pane.setCloseable(true);
 		pane.setTabMenuEnabled(true);
 		pane.setWebColoredBackground(true);
-		// TODO closeable not working
 		pane.addDocumentListener(new DocumentListener<DocumentData>() {
 
 			@Override

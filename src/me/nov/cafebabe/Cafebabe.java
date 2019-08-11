@@ -56,7 +56,7 @@ public class Cafebabe extends WebFrame {
 	private ClassTree tree;
 	private ClassMemberList methods;
 	public JScrollPane smallEditorPanel;
-	private Editor editorFrame;
+	public Editor editorFrame;
 
 	public Cafebabe() {
 		gui = this;
