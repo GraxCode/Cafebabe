@@ -4,6 +4,8 @@ import java.awt.BorderLayout;
 import java.awt.Dimension;
 import java.awt.FlowLayout;
 import java.awt.Toolkit;
+import java.awt.event.WindowAdapter;
+import java.awt.event.WindowEvent;
 
 import javax.swing.JButton;
 import javax.swing.JPanel;
@@ -30,7 +32,14 @@ public class OpcodeChooserDialog extends WebDialog {
 		this.initBounds();
 		this.setTitle(Translations.get("Choose an opcode"));
 		this.setIconImage(Cafebabe.gui.getIconImage());
-		this.setDefaultCloseOperation(WindowConstants.DO_NOTHING_ON_CLOSE);
+		this.setDefaultCloseOperation(WindowConstants.DISPOSE_ON_CLOSE);
+		this.addWindowListener(new WindowAdapter() {
+			@Override
+			public void windowClosing(WindowEvent e) {
+				opcode = ain.getOpcode(); // reset opcode
+				setVisible(false);
+			}
+		});
 		this.setLayout(new BorderLayout());
 		this.add(ocp = new OpcodeChooserPane(this, ain));
 		JPanel buttons = new JPanel(new FlowLayout(4));
