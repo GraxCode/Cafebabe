@@ -12,10 +12,12 @@ import javax.swing.BorderFactory;
 import javax.swing.Box;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
+import javax.swing.SpinnerNumberModel;
 import javax.swing.event.ChangeListener;
 
 import org.objectweb.asm.Opcodes;
 import org.objectweb.asm.tree.AbstractInsnNode;
+import org.objectweb.asm.tree.LabelNode;
 import org.objectweb.asm.tree.LdcInsnNode;
 import org.objectweb.asm.tree.MethodNode;
 
@@ -27,6 +29,7 @@ import com.alee.laf.text.WebTextField;
 
 import me.nov.cafebabe.gui.editor.list.InstructionList;
 import me.nov.cafebabe.gui.opchooser.OpcodeChooserDialog;
+import me.nov.cafebabe.utils.asm.Code;
 import me.nov.cafebabe.utils.asm.Descriptors;
 import me.nov.cafebabe.utils.asm.OpcodeLink;
 import me.nov.cafebabe.utils.formatting.Colors;
@@ -96,13 +99,30 @@ public class InstructionEditorPanel extends JPanel implements Opcodes {
 			Object value = f.get(ain);
 			int type = ain.getType();
 			if (type == AbstractInsnNode.LDC_INSN) {
-				return createLdcEditor(il,(LdcInsnNode) ain ,f);
+				return createLdcEditor(il, (LdcInsnNode) ain, f);
 			}
 			if (name.equals("desc")) {
 				if (type == AbstractInsnNode.METHOD_INSN) {
 					return createInOutDescEditor(il, ain, f, value);
 				}
 				return createSingleDescEditor(il, ain, f, value);
+			}
+			if (f.getType() == LabelNode.class) {
+
+				int labels = Code.getLabelCount(il.mn.instructions);
+				if (labels == 0) {
+					WebSpinner ws = new WebSpinner();
+					ws.setValue(-1);
+					ws.setEnabled(false);
+					return ws;
+				}
+				WebSpinner ws = new WebSpinner(
+						new SpinnerNumberModel(OpcodeFormatting.getLabelIndex((AbstractInsnNode) value), 0, labels - 1, 1));
+				ws.addChangeListener(l -> {
+					setField(f, ain, Code.getLabelByIndex(il.mn.instructions, (int)ws.getValue()));
+					il.repaint();
+				});
+				return ws;
 			}
 			if (f.getType() == String.class) {
 				WebTextField wtf = new WebTextField();
@@ -146,7 +166,7 @@ public class InstructionEditorPanel extends JPanel implements Opcodes {
 		panel.setLayout(new BorderLayout());
 		panel.add(wcb, BorderLayout.WEST);
 		WebTextField field = new WebTextField(ain.cst.toString());
-		
+
 		field.setInputPrompt("only String supported yet..");
 		wcb.setEnabled(false);
 		field.setEnabled(ain.cst.getClass().getSimpleName().equals("String"));

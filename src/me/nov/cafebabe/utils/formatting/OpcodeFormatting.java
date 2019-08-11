@@ -604,12 +604,8 @@ public class OpcodeFormatting implements org.objectweb.asm.Opcodes {
 		return s;
 	}
 
-	public static HashMap<AbstractInsnNode, Integer> labelCache = new HashMap<>();
 
 	public static int getLabelIndex(AbstractInsnNode ain) {
-		if (labelCache.containsKey(ain)) {
-			return labelCache.get(ain);
-		}
 		int index = 0;
 		AbstractInsnNode node = ain;
 		while (node.getPrevious() != null) {
@@ -618,12 +614,6 @@ public class OpcodeFormatting implements org.objectweb.asm.Opcodes {
 				index += 1;
 			}
 		}
-		labelCache.put(ain, index);
 		return index;
 	}
-
-	public static void clearLabelCache() {
-		labelCache.clear();
-	}
-
 }

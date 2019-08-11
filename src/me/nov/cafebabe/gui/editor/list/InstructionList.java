@@ -17,6 +17,7 @@ import javax.swing.event.ListSelectionListener;
 import org.objectweb.asm.Opcodes;
 import org.objectweb.asm.tree.AbstractInsnNode;
 import org.objectweb.asm.tree.InsnNode;
+import org.objectweb.asm.tree.LabelNode;
 import org.objectweb.asm.tree.MethodNode;
 
 import me.nov.cafebabe.Cafebabe;
@@ -30,6 +31,7 @@ public class InstructionList extends JList<InstructionNode> {
 	private static final long serialVersionUID = 1L;
 	public static InstructionNode copiedItem;
 	public MethodNode mn;
+	public AdressList addressList;
 
 	public InstructionList(MethodNode mn) {
 		this.mn = mn;
@@ -68,6 +70,13 @@ public class InstructionList extends JList<InstructionNode> {
 				this.setSelectedIndex(selections[0] + 1);
 			});
 			menu.add(add);
+			JMenuItem addLabel = new JMenuItem(Translations.get("Insert label"));
+			addLabel.addActionListener(l -> {
+				mn.instructions.insert(selection.ain, new LabelNode());
+				this.refresh(mn);
+				this.setSelectedIndex(selections[0] + 1);
+			});
+			menu.add(addLabel);
 			JMenuItem remove = new JMenuItem(Translations.get("Remove"));
 			remove.addActionListener(l -> {
 				mn.instructions.remove(selection.ain);
@@ -139,6 +148,9 @@ public class InstructionList extends JList<InstructionNode> {
 		}
 		this.setModel(llm);
 		this.repaint();
+		if (addressList != null) {
+			addressList.repaint();
+		}
 	}
 
 }

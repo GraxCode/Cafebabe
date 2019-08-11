@@ -25,6 +25,7 @@ public class AdressList extends JList<String> {
 	public AdressList(InstructionList il) {
 		super(new DefaultListModel<String>());
 		this.il = il;
+		il.addressList = this;
 		this.setFont(new Font(Font.SERIF, Font.PLAIN, 13));
 		this.setFocusable(false);
 		this.setSelectionModel(new DefaultListSelectionModel() {
