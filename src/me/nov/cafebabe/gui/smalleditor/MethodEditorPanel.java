@@ -147,7 +147,7 @@ public class MethodEditorPanel extends JPanel {
 			Icon icon = ((JLabel) methodList.getCellRenderer().getTreeCellRendererComponent(methodList, mln, false, false,
 					true, 0, false)).getIcon();
 			Cafebabe.gui.openEditor(new JScrollPane(new InstructionPanel(mln.getMethod())),
-					mln.getClazz().name + "." + mln.getMethod().name, Colors.methodTabColor, icon);
+					"Code: " + mln.getClazz().name + "." + mln.getMethod().name, Colors.methodTabColor, icon);
 		});
 		edit.setPreferredSize(new Dimension(100, (int) edit.getPreferredSize().getHeight()));
 		JButton decompile = new JButton(Translations.get("Decompile"));
@@ -156,7 +156,7 @@ public class MethodEditorPanel extends JPanel {
 			Icon icon = ((JLabel) methodList.getCellRenderer().getTreeCellRendererComponent(methodList, mln, false, false,
 					true, 0, false)).getIcon();
 			Cafebabe.gui.openEditor(new DecompilerPanel(mln.getClazz(), mln.getMethod()),
-					mln.getClazz().name + "." + mln.getMethod().name, Colors.decompilerTabColor, icon);
+					"CFR: " + mln.getClazz().name + "." + mln.getMethod().name, Colors.decompilerTabColor, icon);
 		});
 		decompile.setPreferredSize(new Dimension(100, (int) decompile.getPreferredSize().getHeight()));
 		JButton graph = new JButton(Translations.get("Create Graph"));
@@ -165,7 +165,7 @@ public class MethodEditorPanel extends JPanel {
 			Icon icon = ((JLabel) methodList.getCellRenderer().getTreeCellRendererComponent(methodList, mln, false, false,
 					true, 0, false)).getIcon();
 			Cafebabe.gui.openEditor(new CFGPanel(mln.getMethod()),
-					"Graph of " + mln.getClazz().name + "." + mln.getMethod().name, Colors.graphTabColor, icon);
+					"Graph: " + mln.getClazz().name + "." + mln.getMethod().name, Colors.graphTabColor, icon);
 		});
 		graph.setPreferredSize(new Dimension(100, (int) decompile.getPreferredSize().getHeight()));
 

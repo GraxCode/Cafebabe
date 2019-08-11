@@ -43,7 +43,7 @@ public class Editor extends JFrame {
 
 			@Override
 			public void closed(DocumentData arg0, PaneData<DocumentData> arg1, int arg2) {
-				if(pane.getDocumentsCount() == 0) {
+				if (pane.getDocumentsCount() == 0) {
 					setVisible(false);
 				}
 			}
@@ -95,9 +95,16 @@ public class Editor extends JFrame {
 	}
 
 	public void open(Component c, String title, Icon icon, Color color) {
-		if(c instanceof JScrollPane) {
+		if (c instanceof JScrollPane) {
 			JScrollPane sp = (JScrollPane) c;
 			sp.getVerticalScrollBar().setUnitIncrement(16);
+		}
+		for (int i = 0; i < pane.getDocumentsCount(); i++) {
+			DocumentData dd = pane.getDocument(i);
+			if (dd.getTitle().equals(title)) {
+				pane.setSelected(dd);
+				return;
+			}
 		}
 		pane.openDocument(new DocumentData(TextUtils.generateId(), icon, title, color, c));
 	}

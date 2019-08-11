@@ -160,7 +160,7 @@ public class ClassEditorPanel extends JPanel {
 			SortedTreeClassNode treeNode = (SortedTreeClassNode) classTree.getLastSelectedPathComponent();
 			Icon icon = ((JLabel) classTree.getCellRenderer().getTreeCellRendererComponent(classTree, treeNode, false, false,
 					true, 0, false)).getIcon();
-			Cafebabe.gui.openEditor(new DecompilerPanel(treeNode.getClazz(), null), treeNode.getClazz().name,
+			Cafebabe.gui.openEditor(new DecompilerPanel(treeNode.getClazz(), null), "CFR: " + treeNode.getClazz().name,
 					Colors.decompilerTabColor, icon);
 		});
 		decompile.setPreferredSize(new Dimension(100, (int) decompile.getPreferredSize().getHeight()));
