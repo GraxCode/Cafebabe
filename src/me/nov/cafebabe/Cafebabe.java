@@ -184,12 +184,13 @@ public class Cafebabe extends WebFrame {
 			if (!folder.exists()) {
 				folder.mkdir();
 			}
-			for(LookAndFeelInfo lafi : UIManager.getInstalledLookAndFeels()) {
-				if(lafi.getName().equals("Nimbus")) {
+			for (LookAndFeelInfo lafi : UIManager.getInstalledLookAndFeels()) {
+				if (lafi.getName().equals("Nimbus")) {
 					UIManager.setLookAndFeel(lafi.getClassName());
 					break;
 				}
 			}
+			new Translations(); //load translations
 			WebLookAndFeel.install();
 			WebLookAndFeel.setDecorateFrames(true);
 			WebLookAndFeel.setDecorateDialogs(true);

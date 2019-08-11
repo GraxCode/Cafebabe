@@ -11,9 +11,12 @@ import java.util.Properties;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
+import com.alee.laf.WebLookAndFeel;
+
 import me.nov.cafebabe.Cafebabe;
 import me.nov.cafebabe.gui.smalleditor.ChangelogPanel;
 import me.nov.cafebabe.utils.io.Scanning;
+import me.nov.cafebabe.utils.ui.WebLaF;
 import me.nov.cafebabe.utils.web.URLReader;
 
 public class Translations {
@@ -74,6 +77,7 @@ public class Translations {
 	}
 
 	private static void loadTranslations() {
+		boolean needFontUpdate = false;
 		String fileName = language + ".translation";
 		translationsFile = new File(new File(Cafebabe.folder, "translations"), fileName);
 		// TODO warn about old translation?
@@ -83,7 +87,12 @@ public class Translations {
 				properties.load(new FileInputStream(translationsFile));
 
 				for (Object key : properties.keySet()) {
-					translations.put(Integer.valueOf(String.valueOf(key)), String.valueOf(properties.get(key)));
+					String translation = String.valueOf(properties.get(key));
+					if(!needFontUpdate && WebLookAndFeel.globalControlFont.canDisplayUpTo(translation) != -1) {
+						needFontUpdate = true; //check for chinese or similar characters
+					}
+					translations.put(Integer.valueOf(String.valueOf(key)), translation);
+					
 				}
 			} catch (IOException e) {
 				e.printStackTrace();
@@ -104,6 +113,9 @@ public class Translations {
 					e1.printStackTrace();
 				}
 			}
+		}
+		if(needFontUpdate) {
+			WebLaF.fixUnicodeSupport();
 		}
 	}
 
