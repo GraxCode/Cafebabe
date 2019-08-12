@@ -86,13 +86,20 @@ public class InstructionEditorPanel extends JPanel implements Opcodes {
 			String name = f.getName();
 			this.add(new JLabel(name.substring(0, 1).toUpperCase() + name.substring(1) + ":"), gbc);
 			gbc.gridwidth = GridBagConstraints.REMAINDER;
+			gbc.weightx = 1;
 			this.add(createEditor(instructionList, ain, name, f), gbc);
 		}
-		this.add(new JPanel(), new GridBagConstraints(1, 10, 4, 1, 0, 0, GridBagConstraints.EAST, GridBagConstraints.NONE,
-				new Insets(0, 0, 0, 0), 0, 0));
-		this.add(Box.createGlue(), new GridBagConstraints(0, 11, 4, 1, 0, 1, GridBagConstraints.EAST,
+
+		int gridy = gbc.gridy;
+		gbc.gridwidth = 1;
+		gbc.gridy = 0;
+		this.add(new JPanel(new GridBagLayout()), new GridBagConstraints(1, ++gridy, 4, 1, 0, 0, GridBagConstraints.EAST,
+				GridBagConstraints.NONE, new Insets(0, 0, 0, 0), 0, 0));
+		this.add(Box.createGlue(), new GridBagConstraints(0, ++gridy, 4, 1, 0, 1, GridBagConstraints.EAST,
 				GridBagConstraints.NONE, new Insets(0, 0, 0, 0), 0, 0));
 	}
+
+	private static final int maxWidth = 200;
 
 	private Component createEditor(InstructionList il, AbstractInsnNode ain, String name, Field f) {
 		try {
@@ -119,13 +126,14 @@ public class InstructionEditorPanel extends JPanel implements Opcodes {
 				WebSpinner ws = new WebSpinner(
 						new SpinnerNumberModel(OpcodeFormatting.getLabelIndex((AbstractInsnNode) value), 0, labels - 1, 1));
 				ws.addChangeListener(l -> {
-					setField(f, ain, Code.getLabelByIndex(il.mn.instructions, (int)ws.getValue()));
+					setField(f, ain, Code.getLabelByIndex(il.mn.instructions, (int) ws.getValue()));
 					il.repaint();
 				});
 				return ws;
 			}
 			if (f.getType() == String.class) {
 				WebTextField wtf = new WebTextField();
+				// wtf.setMaximumWidth(maxWidth);
 				wtf.setText(value != null ? String.valueOf(value) : "");
 				Listeners.addChangeListener(wtf, l -> {
 					String text = wtf.getText().trim();
@@ -166,7 +174,7 @@ public class InstructionEditorPanel extends JPanel implements Opcodes {
 		panel.setLayout(new BorderLayout());
 		panel.add(wcb, BorderLayout.WEST);
 		WebTextField field = new WebTextField(ain.cst.toString());
-
+		field.setMaximumWidth(maxWidth / 2);
 		field.setInputPrompt("only String supported yet..");
 		wcb.setEnabled(false);
 		field.setEnabled(ain.cst.getClass().getSimpleName().equals("String"));
@@ -192,7 +200,7 @@ public class InstructionEditorPanel extends JPanel implements Opcodes {
 
 	private WebTextField createSingleDescEditor(InstructionList il, AbstractInsnNode ain, Field f, Object value) {
 		WebTextField argsField = new WebTextField(Descriptors.getDisplayTypeEditable(((String) value)));
-
+		argsField.setMaximumWidth(maxWidth);
 		Listeners.addChangeListener(argsField, c -> {
 			setField(f, ain, Descriptors.displayTypeToDesc(argsField.getText().trim()));
 			il.repaint();
@@ -203,8 +211,9 @@ public class InstructionEditorPanel extends JPanel implements Opcodes {
 	private JPanel createInOutDescEditor(InstructionList il, AbstractInsnNode ain, Field f, Object value) {
 		String[] descArgs = ((String) value).split("\\)");
 		WebTextField argsField = new WebTextField(Descriptors.getDisplayTypeEditable(descArgs[0].substring(1)));
+		argsField.setMaximumWidth(maxWidth / 2);
 		WebTextField retField = new WebTextField(Descriptors.getDisplayTypeEditable(descArgs[1]));
-		retField.setMinimumWidth(20);
+		retField.setMinimumWidth(maxWidth / 2);
 		ChangeListener l = (c -> {
 			StringBuilder desc = new StringBuilder();
 			String args = argsField.getText().replace(" ", ""); // spaces don't matter

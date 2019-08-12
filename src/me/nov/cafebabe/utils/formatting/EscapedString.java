@@ -6,7 +6,7 @@ public class EscapedString {
 
 	public EscapedString(String text) {
 		super();
-		if(text == null) {
+		if (text == null) {
 			text = "";
 		}
 		this.text = text;
@@ -14,6 +14,22 @@ public class EscapedString {
 			text = text.substring(0, 124) + "...";
 		}
 		this.escapedText = text.replace("&", "&amp;").replace("<", "&lt;").replace(">", "&gt;");
+	}
+
+	public EscapedString(String text, int max, boolean html) {
+		super();
+		if (text == null) {
+			text = "";
+		}
+		this.text = text;
+		if (text.length() > max) {
+			text = text.substring(0, max - 3) + "...";
+		}
+		if (html) {
+			this.escapedText = text.replace("&", "&amp;").replace("<", "&lt;").replace(">", "&gt;");
+		} else {
+			this.escapedText = text;
+		}
 	}
 
 	public String getText() {

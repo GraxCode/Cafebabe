@@ -148,7 +148,7 @@ public class MethodEditorPanel extends JPanel {
 			Icon icon = ((JLabel) methodList.getCellRenderer().getTreeCellRendererComponent(methodList, mln, false, false,
 					true, 0, false)).getIcon();
 			Cafebabe.gui.openEditor(new JScrollPane(new InstructionPanel(mln.getMethod())),
-					"Code: " + new EscapedString(mln.getClazz().name + "." + mln.getMethod().name).getEscapedText(), Colors.methodTabColor, icon);
+					"Code: " + new EscapedString(mln.getMethod().name + " (" + mln.getClazz().name + ")", 70, false).getEscapedText(), Colors.methodTabColor, icon);
 		});
 		edit.setPreferredSize(new Dimension(100, (int) edit.getPreferredSize().getHeight()));
 		JButton decompile = new JButton(Translations.get("Decompile"));
@@ -157,7 +157,7 @@ public class MethodEditorPanel extends JPanel {
 			Icon icon = ((JLabel) methodList.getCellRenderer().getTreeCellRendererComponent(methodList, mln, false, false,
 					true, 0, false)).getIcon();
 			Cafebabe.gui.openEditor(new DecompilerPanel(mln.getClazz(), mln.getMethod()),
-					"CFR: " + new EscapedString(mln.getClazz().name + "." + mln.getMethod().name).getEscapedText(), Colors.decompilerTabColor, icon);
+					"CFR: " + new EscapedString(mln.getMethod().name + " (" + mln.getClazz().name + ")", 70, false).getEscapedText(), Colors.decompilerTabColor, icon);
 		});
 		decompile.setPreferredSize(new Dimension(100, (int) decompile.getPreferredSize().getHeight()));
 		JButton graph = new JButton(Translations.get("Create Graph"));
@@ -166,7 +166,7 @@ public class MethodEditorPanel extends JPanel {
 			Icon icon = ((JLabel) methodList.getCellRenderer().getTreeCellRendererComponent(methodList, mln, false, false,
 					true, 0, false)).getIcon();
 			Cafebabe.gui.openEditor(new CFGPanel(mln.getMethod()),
-					"Graph: " + new EscapedString(mln.getClazz().name + "." + mln.getMethod().name).getEscapedText(), Colors.graphTabColor, icon);
+					"Graph: " + new EscapedString(mln.getMethod().name + " (" + mln.getClazz().name + ")", 70, false).getEscapedText(), Colors.graphTabColor, icon);
 		});
 		graph.setPreferredSize(new Dimension(100, (int) decompile.getPreferredSize().getHeight()));
 

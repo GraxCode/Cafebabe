@@ -90,7 +90,7 @@ public class MethodListCellRenderer extends DefaultTreeCellRenderer implements O
 
 	@Override
 	public Font getFont() {
-		return new Font("Arial", Font.PLAIN, 12);
+		return new Font(Font.SANS_SERIF, Font.PLAIN, 12);
 	}
 
 	private ImageIcon generateIcon(int access, String name) {

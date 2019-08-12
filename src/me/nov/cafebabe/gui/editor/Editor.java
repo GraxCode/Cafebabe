@@ -4,6 +4,7 @@ import java.awt.BorderLayout;
 import java.awt.Color;
 import java.awt.Component;
 import java.awt.Dimension;
+import java.awt.Font;
 import java.awt.Toolkit;
 
 import javax.swing.Icon;
@@ -36,6 +37,7 @@ public class Editor extends JFrame {
 		this.setLayout(new BorderLayout());
 		this.setAlwaysOnTop(true);
 		this.pane = new WebDocumentPane();
+		pane.setFont(new Font(Font.SANS_SERIF, Font.PLAIN, 12));
 		pane.setCloseable(true);
 		pane.setTabMenuEnabled(true);
 		pane.setWebColoredBackground(true);
