@@ -314,6 +314,7 @@ public class MethodEditorPanel extends JPanel {
 			this.signature.setText(method.signature);
 		} else {
 			hasSignature.setSelected(false);
+			this.signature.setText("");
 		}
 		this.exceptions.setText(String.join(", ", method.exceptions));
 	}
