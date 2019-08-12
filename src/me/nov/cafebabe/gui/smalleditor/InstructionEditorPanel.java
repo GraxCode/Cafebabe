@@ -2,6 +2,7 @@ package me.nov.cafebabe.gui.smalleditor;
 
 import java.awt.BorderLayout;
 import java.awt.Component;
+import java.awt.Dimension;
 import java.awt.GridBagConstraints;
 import java.awt.GridBagLayout;
 import java.awt.Insets;
@@ -45,7 +46,7 @@ public class InstructionEditorPanel extends JPanel implements Opcodes {
 		this.setLayout(new GridBagLayout());
 		this.setBorder(BorderFactory.createEmptyBorder(4, 10, 10, 10));
 		this.setFocusable(false);
-		WebLabel opcode = new WebLabel(WebLabel.CENTER);
+		WebLabel opcode = new WebLabel(WebLabel.LEFT);
 		opcode.setText("<html>" + Html.color(Colors.getColor(ain.getType(), ain.getOpcode()),
 				Html.bold(OpcodeFormatting.getOpcodeText(ain.getOpcode()).toLowerCase())));
 		Listeners.addMouseReleasedListener(opcode, () -> {
@@ -61,6 +62,8 @@ public class InstructionEditorPanel extends JPanel implements Opcodes {
 				}
 			}
 		}, false);
+		
+		
 		JLabel opcodeLabel = new JLabel("Opcode:");
 		opcodeLabel.setDisplayedMnemonic('O');
 		opcodeLabel.setLabelFor(opcode);
@@ -93,9 +96,11 @@ public class InstructionEditorPanel extends JPanel implements Opcodes {
 		int gridy = gbc.gridy;
 		gbc.gridwidth = 1;
 		gbc.gridy = 0;
-		this.add(new JPanel(new GridBagLayout()), new GridBagConstraints(1, ++gridy, 4, 1, 0, 0, GridBagConstraints.EAST,
-				GridBagConstraints.NONE, new Insets(0, 0, 0, 0), 0, 0));
-		this.add(Box.createGlue(), new GridBagConstraints(0, ++gridy, 4, 1, 0, 1, GridBagConstraints.EAST,
+		JPanel panel = new JPanel();
+		panel.setPreferredSize(new Dimension(300, (int) panel.getPreferredSize().getHeight()));
+		this.add(panel, new GridBagConstraints(1, gridy + 1, 4, 1, 0, 0, GridBagConstraints.EAST, GridBagConstraints.NONE,
+				new Insets(0, 0, 0, 0), 0, 0));
+		this.add(Box.createGlue(), new GridBagConstraints(0, gridy + 2, 4, 1, 0, 1, GridBagConstraints.EAST,
 				GridBagConstraints.NONE, new Insets(0, 0, 0, 0), 0, 0));
 	}
 
@@ -133,7 +138,7 @@ public class InstructionEditorPanel extends JPanel implements Opcodes {
 			}
 			if (f.getType() == String.class) {
 				WebTextField wtf = new WebTextField();
-				// wtf.setMaximumWidth(maxWidth);
+				wtf.setMaximumWidth(maxWidth);
 				wtf.setText(value != null ? String.valueOf(value) : "");
 				Listeners.addChangeListener(wtf, l -> {
 					String text = wtf.getText().trim();
