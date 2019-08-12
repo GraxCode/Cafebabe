@@ -228,7 +228,13 @@ public class ClassEditorPanel extends JPanel {
 		JPanel buttonPanel = new JPanel(new GridBagLayout());
 		gbc.gridwidth = 1;
 		gbc.gridy = 0;
-
+		JLabel placeholder = new JLabel();
+		placeholder.setPreferredSize(new Dimension(100, (int) placeholder.getPreferredSize().getHeight()));
+		JLabel placeholder2 = new JLabel();
+		placeholder2.setPreferredSize(new Dimension(100, (int) placeholder.getPreferredSize().getHeight()));
+		
+		buttonPanel.add(placeholder, gbc);
+		buttonPanel.add(placeholder2, gbc);
 		buttonPanel.add(decompile, gbc);
 		this.add(buttonPanel, new GridBagConstraints(1, 11, 4, 1, 0, 0, GridBagConstraints.EAST, GridBagConstraints.NONE,
 				new Insets(0, 0, 0, 0), 0, 0));
