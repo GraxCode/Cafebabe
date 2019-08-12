@@ -32,6 +32,7 @@ import me.nov.cafebabe.gui.node.SortedTreeClassNode;
 import me.nov.cafebabe.gui.ui.MethodListCellRenderer;
 import me.nov.cafebabe.translations.Translations;
 import me.nov.cafebabe.utils.formatting.Colors;
+import me.nov.cafebabe.utils.formatting.EscapedString;
 import me.nov.cafebabe.utils.ui.Listeners;
 import me.nov.cafebabe.utils.ui.WebLaF;
 
@@ -160,7 +161,7 @@ public class ClassEditorPanel extends JPanel {
 			SortedTreeClassNode treeNode = (SortedTreeClassNode) classTree.getLastSelectedPathComponent();
 			Icon icon = ((JLabel) classTree.getCellRenderer().getTreeCellRendererComponent(classTree, treeNode, false, false,
 					true, 0, false)).getIcon();
-			Cafebabe.gui.openEditor(new DecompilerPanel(treeNode.getClazz(), null), "CFR: " + treeNode.getClazz().name,
+			Cafebabe.gui.openEditor(new DecompilerPanel(treeNode.getClazz(), null), "CFR: " + new EscapedString(treeNode.getClazz().name).getEscapedText(),
 					Colors.decompilerTabColor, icon);
 		});
 		decompile.setPreferredSize(new Dimension(100, (int) decompile.getPreferredSize().getHeight()));

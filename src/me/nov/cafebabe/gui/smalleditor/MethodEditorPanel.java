@@ -35,6 +35,7 @@ import me.nov.cafebabe.gui.ui.MethodListCellRenderer;
 import me.nov.cafebabe.translations.Translations;
 import me.nov.cafebabe.utils.asm.Descriptors;
 import me.nov.cafebabe.utils.formatting.Colors;
+import me.nov.cafebabe.utils.formatting.EscapedString;
 import me.nov.cafebabe.utils.ui.Listeners;
 import me.nov.cafebabe.utils.ui.WebLaF;
 
@@ -147,7 +148,7 @@ public class MethodEditorPanel extends JPanel {
 			Icon icon = ((JLabel) methodList.getCellRenderer().getTreeCellRendererComponent(methodList, mln, false, false,
 					true, 0, false)).getIcon();
 			Cafebabe.gui.openEditor(new JScrollPane(new InstructionPanel(mln.getMethod())),
-					"Code: " + mln.getClazz().name + "." + mln.getMethod().name, Colors.methodTabColor, icon);
+					"Code: " + new EscapedString(mln.getClazz().name + "." + mln.getMethod().name).getEscapedText(), Colors.methodTabColor, icon);
 		});
 		edit.setPreferredSize(new Dimension(100, (int) edit.getPreferredSize().getHeight()));
 		JButton decompile = new JButton(Translations.get("Decompile"));
@@ -156,7 +157,7 @@ public class MethodEditorPanel extends JPanel {
 			Icon icon = ((JLabel) methodList.getCellRenderer().getTreeCellRendererComponent(methodList, mln, false, false,
 					true, 0, false)).getIcon();
 			Cafebabe.gui.openEditor(new DecompilerPanel(mln.getClazz(), mln.getMethod()),
-					"CFR: " + mln.getClazz().name + "." + mln.getMethod().name, Colors.decompilerTabColor, icon);
+					"CFR: " + new EscapedString(mln.getClazz().name + "." + mln.getMethod().name).getEscapedText(), Colors.decompilerTabColor, icon);
 		});
 		decompile.setPreferredSize(new Dimension(100, (int) decompile.getPreferredSize().getHeight()));
 		JButton graph = new JButton(Translations.get("Create Graph"));
@@ -165,7 +166,7 @@ public class MethodEditorPanel extends JPanel {
 			Icon icon = ((JLabel) methodList.getCellRenderer().getTreeCellRendererComponent(methodList, mln, false, false,
 					true, 0, false)).getIcon();
 			Cafebabe.gui.openEditor(new CFGPanel(mln.getMethod()),
-					"Graph: " + mln.getClazz().name + "." + mln.getMethod().name, Colors.graphTabColor, icon);
+					"Graph: " + new EscapedString(mln.getClazz().name + "." + mln.getMethod().name).getEscapedText(), Colors.graphTabColor, icon);
 		});
 		graph.setPreferredSize(new Dimension(100, (int) decompile.getPreferredSize().getHeight()));
 
