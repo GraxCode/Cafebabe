@@ -1,6 +1,10 @@
 <html>
 <h1>Changelog</hl>
 <hr>
+<h2>Version 0.1.1</h2>
+<p>Editing now supports the most important instructions, reordering, inserting, copying, etc. Obfuscated jar files are not that much of a problem anymore (in terms of GUI) and some small bugs were corrected. Unicode characters should also be working by now.</p>
+<br>
+<hr>
 <h2>Version 0.1.0</h2>
 <p>Fully implemented the decompiler and some code-editing. Also made a new editor for translations, that you can use to make your own (or even for everybody)! You can also change cfr settings from the preferences page.</p>
 <br>
