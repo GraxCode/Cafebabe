@@ -1,6 +1,10 @@
 <html>
 <h1>Changelog</hl>
 <hr>
+<h2>Version 0.1.2</h2>
+<p>More editor improvements, the most used opcodes and need functions are working now! Special nodes like invokedynamic or switches will be implemented later!</p>
+<br>
+<hr>
 <h2>Version 0.1.1</h2>
 <p>Editing now supports the most important instructions, reordering, inserting, copying, etc. Obfuscated jar files are not that much of a problem anymore (in terms of GUI) and some small bugs were corrected. Unicode characters should also be working by now.</p>
 <br>
