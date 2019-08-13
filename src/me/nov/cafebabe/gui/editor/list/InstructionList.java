@@ -16,6 +16,7 @@ import javax.swing.event.ListSelectionListener;
 
 import org.objectweb.asm.Opcodes;
 import org.objectweb.asm.tree.AbstractInsnNode;
+import org.objectweb.asm.tree.ClassNode;
 import org.objectweb.asm.tree.InsnNode;
 import org.objectweb.asm.tree.LabelNode;
 import org.objectweb.asm.tree.MethodNode;
@@ -33,7 +34,7 @@ public class InstructionList extends JList<InstructionNode> {
 	public MethodNode mn;
 	public AdressList addressList;
 
-	public InstructionList(MethodNode mn) {
+	public InstructionList(ClassNode cn, MethodNode mn) {
 		this.mn = mn;
 		this.setFont(new Font(Font.SANS_SERIF, Font.PLAIN, 13));
 		this.setFocusable(false);
@@ -44,7 +45,7 @@ public class InstructionList extends JList<InstructionNode> {
 			public void valueChanged(ListSelectionEvent arg0) {
 				InstructionNode in = getSelectedValue();
 				if (!arg0.getValueIsAdjusting() && in != null) {
-					Cafebabe.gui.smallEditorPanel.setViewportView(new InstructionEditorPanel(InstructionList.this, mn, in.ain));
+					Cafebabe.gui.smallEditorPanel.setViewportView(new InstructionEditorPanel(InstructionList.this, cn, mn, in.ain));
 				}
 			}
 		});

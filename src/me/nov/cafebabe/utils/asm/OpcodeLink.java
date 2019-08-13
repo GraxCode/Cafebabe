@@ -2,12 +2,14 @@ package me.nov.cafebabe.utils.asm;
 
 import org.objectweb.asm.Opcodes;
 import org.objectweb.asm.tree.AbstractInsnNode;
+import org.objectweb.asm.tree.ClassNode;
 import org.objectweb.asm.tree.FieldInsnNode;
 import org.objectweb.asm.tree.IincInsnNode;
 import org.objectweb.asm.tree.InsnNode;
 import org.objectweb.asm.tree.IntInsnNode;
 import org.objectweb.asm.tree.InvokeDynamicInsnNode;
 import org.objectweb.asm.tree.JumpInsnNode;
+import org.objectweb.asm.tree.LabelNode;
 import org.objectweb.asm.tree.LdcInsnNode;
 import org.objectweb.asm.tree.LookupSwitchInsnNode;
 import org.objectweb.asm.tree.MethodInsnNode;
@@ -17,7 +19,7 @@ import org.objectweb.asm.tree.TypeInsnNode;
 import org.objectweb.asm.tree.VarInsnNode;
 
 public class OpcodeLink implements Opcodes {
-	
+
 	public static Class<?> getOpcodeNode(int op) {
 		switch (op) {
 		case NOP:
@@ -367,6 +369,183 @@ public class OpcodeLink implements Opcodes {
 			return AbstractInsnNode.MULTIANEWARRAY_INSN;
 		case INVOKEDYNAMIC:
 			return AbstractInsnNode.INVOKE_DYNAMIC_INSN;
+		default:
+			throw new RuntimeException("unknown opcode");
+		}
+	}
+
+	public static AbstractInsnNode constructNode(int op, ClassNode cn, LabelNode label) {
+		switch (op) {
+		case NOP:
+		case ACONST_NULL:
+		case ICONST_M1:
+		case ICONST_0:
+		case ICONST_1:
+		case ICONST_2:
+		case ICONST_3:
+		case ICONST_4:
+		case ICONST_5:
+		case LCONST_0:
+		case LCONST_1:
+		case FCONST_0:
+		case FCONST_1:
+		case FCONST_2:
+		case DCONST_0:
+		case DCONST_1:
+		case IASTORE:
+		case LASTORE:
+		case FASTORE:
+		case DASTORE:
+		case AASTORE:
+		case BASTORE:
+		case CASTORE:
+		case SASTORE:
+		case IALOAD:
+		case LALOAD:
+		case FALOAD:
+		case DALOAD:
+		case AALOAD:
+		case BALOAD:
+		case CALOAD:
+		case SALOAD:
+		case POP:
+		case POP2:
+		case DUP:
+		case DUP_X1:
+		case DUP_X2:
+		case DUP2:
+		case DUP2_X1:
+		case DUP2_X2:
+		case SWAP:
+		case IADD:
+		case LADD:
+		case FADD:
+		case DADD:
+		case ISUB:
+		case LSUB:
+		case FSUB:
+		case DSUB:
+		case IMUL:
+		case LMUL:
+		case FMUL:
+		case DMUL:
+		case IDIV:
+		case LDIV:
+		case FDIV:
+		case DDIV:
+		case IREM:
+		case LREM:
+		case FREM:
+		case DREM:
+		case INEG:
+		case LNEG:
+		case FNEG:
+		case DNEG:
+		case ISHL:
+		case LSHL:
+		case ISHR:
+		case LSHR:
+		case IUSHR:
+		case LUSHR:
+		case IAND:
+		case LAND:
+		case IOR:
+		case LOR:
+		case IXOR:
+		case LXOR:
+		case I2L:
+		case I2F:
+		case I2D:
+		case L2I:
+		case L2F:
+		case L2D:
+		case F2I:
+		case F2L:
+		case F2D:
+		case D2I:
+		case D2L:
+		case D2F:
+		case I2B:
+		case I2C:
+		case I2S:
+		case LCMP:
+		case FCMPL:
+		case FCMPG:
+		case DCMPL:
+		case DCMPG:
+		case IRETURN:
+		case LRETURN:
+		case FRETURN:
+		case DRETURN:
+		case ARETURN:
+		case RETURN:
+		case ATHROW:
+		case ARRAYLENGTH:
+		case MONITORENTER:
+		case MONITOREXIT:
+			return new InsnNode(op);
+		case BIPUSH:
+		case SIPUSH:
+			return new IntInsnNode(op, 0);
+		case LDC:
+			return new LdcInsnNode("");
+		case ILOAD:
+		case LLOAD:
+		case FLOAD:
+		case DLOAD:
+		case ALOAD:
+		case ISTORE:
+		case LSTORE:
+		case FSTORE:
+		case DSTORE:
+		case ASTORE:
+		case RET:
+			return new VarInsnNode(op, 0);
+		case IINC:
+			return new IincInsnNode(0, 1);
+		case IFEQ:
+		case IFNE:
+		case IFLT:
+		case IFGE:
+		case IFGT:
+		case IFLE:
+		case IF_ICMPEQ:
+		case IF_ICMPNE:
+		case IF_ICMPLT:
+		case IF_ICMPGE:
+		case IF_ICMPGT:
+		case IF_ICMPLE:
+		case IF_ACMPEQ:
+		case IF_ACMPNE:
+		case GOTO:
+		case IFNULL:
+		case IFNONNULL:
+		case JSR:
+			return new JumpInsnNode(op, label);
+		case TABLESWITCH:
+			return new TableSwitchInsnNode(0, 1, label, label);
+		case LOOKUPSWITCH:
+			return new LookupSwitchInsnNode(label, new int[] { 0 }, new LabelNode[] { label });
+		case GETSTATIC:
+		case PUTSTATIC:
+		case GETFIELD:
+		case PUTFIELD:
+			return new FieldInsnNode(op, cn.name, "field", "Ljava/lang/Object;");
+		case INVOKEVIRTUAL:
+		case INVOKESPECIAL:
+		case INVOKESTATIC:
+		case INVOKEINTERFACE:
+			return new MethodInsnNode(op, cn.name, "method", "()V");
+		case NEW:
+		case NEWARRAY:
+		case ANEWARRAY:
+		case CHECKCAST:
+		case INSTANCEOF:
+			return new TypeInsnNode(op, "Ljava/lang/Object;");
+		case MULTIANEWARRAY:
+			return new MultiANewArrayInsnNode("I", 1);
+		case INVOKEDYNAMIC:
+			throw new RuntimeException("unimplemented");
 		default:
 			throw new RuntimeException("unknown opcode");
 		}

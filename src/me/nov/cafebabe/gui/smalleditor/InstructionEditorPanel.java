@@ -18,6 +18,7 @@ import javax.swing.event.ChangeListener;
 
 import org.objectweb.asm.Opcodes;
 import org.objectweb.asm.tree.AbstractInsnNode;
+import org.objectweb.asm.tree.ClassNode;
 import org.objectweb.asm.tree.LabelNode;
 import org.objectweb.asm.tree.LdcInsnNode;
 import org.objectweb.asm.tree.MethodNode;
@@ -42,28 +43,28 @@ import me.nov.cafebabe.utils.ui.WebLaF;
 public class InstructionEditorPanel extends JPanel implements Opcodes {
 	private static final long serialVersionUID = 1L;
 
-	public InstructionEditorPanel(InstructionList instructionList, MethodNode mn, AbstractInsnNode ain) {
+	public InstructionEditorPanel(InstructionList instructionList, ClassNode cn, MethodNode mn, AbstractInsnNode ain) {
 		this.setLayout(new GridBagLayout());
 		this.setBorder(BorderFactory.createEmptyBorder(4, 10, 10, 10));
 		this.setFocusable(false);
 		WebLabel opcode = new WebLabel(WebLabel.LEFT);
-		opcode.setText("<html>" + Html.color(Colors.getColor(ain.getType(), ain.getOpcode()),
+		opcode.setText("<html>\u00A0" + Html.color(Colors.getColor(ain.getType(), ain.getOpcode()),
 				Html.bold(OpcodeFormatting.getOpcodeText(ain.getOpcode()).toLowerCase())));
 		Listeners.addMouseReleasedListener(opcode, () -> {
 			int newOp = new OpcodeChooserDialog(ain).getOpcode();
 			if (newOp != ain.getOpcode()) {
 				if (OpcodeLink.getOpcodeNode(newOp).getName().equals(ain.getClass().getName())) {
-					opcode.setText("<html>" + Html.color(Colors.getColor(ain.getType(), newOp),
+					opcode.setText("<html>\u00A0" + Html.color(Colors.getColor(ain.getType(), newOp),
 							Html.bold(OpcodeFormatting.getOpcodeText(newOp).toLowerCase())));
 					ain.setOpcode(newOp);
 					instructionList.repaint();
 				} else {
-					throw new RuntimeException("unimplemented");
+					mn.instructions.set(ain, OpcodeLink.constructNode(newOp, cn, Code.getLabelByIndex(mn.instructions, 0)));
+					instructionList.refresh(mn);
 				}
 			}
 		}, false);
-		
-		
+
 		JLabel opcodeLabel = new JLabel("Opcode:");
 		opcodeLabel.setDisplayedMnemonic('O');
 		opcodeLabel.setLabelFor(opcode);

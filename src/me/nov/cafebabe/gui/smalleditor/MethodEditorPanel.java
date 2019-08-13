@@ -147,7 +147,7 @@ public class MethodEditorPanel extends JPanel {
 			MethodListNode mln = (MethodListNode) methodList.getLastSelectedPathComponent();
 			Icon icon = ((JLabel) methodList.getCellRenderer().getTreeCellRendererComponent(methodList, mln, false, false,
 					true, 0, false)).getIcon();
-			Cafebabe.gui.openEditor(new JScrollPane(new InstructionPanel(mln.getMethod())),
+			Cafebabe.gui.openEditor(new JScrollPane(new InstructionPanel(mln.getClazz(), mln.getMethod())),
 					"Code: " + new EscapedString(mln.getMethod().name + " (" + mln.getClazz().name + ")", 70, false).getEscapedText(), Colors.methodTabColor, icon);
 		});
 		edit.setPreferredSize(new Dimension(100, (int) edit.getPreferredSize().getHeight()));

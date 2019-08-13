@@ -6,6 +6,7 @@ import java.awt.Color;
 import javax.swing.BorderFactory;
 import javax.swing.JPanel;
 
+import org.objectweb.asm.tree.ClassNode;
 import org.objectweb.asm.tree.MethodNode;
 
 import me.nov.cafebabe.gui.editor.list.AdressList;
@@ -14,10 +15,10 @@ import me.nov.cafebabe.gui.editor.list.InstructionList;
 public class InstructionPanel extends JPanel {
 	private static final long serialVersionUID = 1L;
 
-	public InstructionPanel(MethodNode mn) {
+	public InstructionPanel(ClassNode cn, MethodNode mn) {
 		this.setFocusable(false);
 		this.setLayout(new BorderLayout());
-		InstructionList il = new InstructionList(mn);
+		InstructionList il = new InstructionList(cn, mn);
 		this.add(il, BorderLayout.CENTER);
 		JPanel p = new JPanel();
 		p.setLayout(new BorderLayout());

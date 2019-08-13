@@ -43,8 +43,6 @@ public class WebLaF {
 	}
 	
   public static void fixUnicodeSupport() {
-  	
-  	// if (!WebLookAndFeel.globalControlFont.canDisplay(c))
     WebLookAndFeel.globalControlFont = fixFont(WebLookAndFeel.globalControlFont);
     WebLookAndFeel.globalTooltipFont = fixFont(WebLookAndFeel.globalTooltipFont);
     WebLookAndFeel.globalAlertFont = fixFont(WebLookAndFeel.globalAlertFont);
