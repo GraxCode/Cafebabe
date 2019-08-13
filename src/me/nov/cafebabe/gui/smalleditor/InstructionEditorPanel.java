@@ -17,6 +17,7 @@ import javax.swing.SpinnerNumberModel;
 import javax.swing.event.ChangeListener;
 
 import org.objectweb.asm.Opcodes;
+import org.objectweb.asm.Type;
 import org.objectweb.asm.tree.AbstractInsnNode;
 import org.objectweb.asm.tree.ClassNode;
 import org.objectweb.asm.tree.LabelNode;
@@ -172,7 +173,8 @@ public class InstructionEditorPanel extends JPanel implements Opcodes {
 	}
 
 	private Component createLdcEditor(InstructionList il, LdcInsnNode ain, Field f) {
-		String[] items = { "String", "Integer", "Float", "Long", "Double", "Type", "Handle", "ConstantDynamic" };
+		String[] items = { "String", "Integer", "Float", "Long", "Double", "Type", "<html><s>Handle",
+				"<html><s>ConstantDynamic" };
 
 		WebComboBox wcb = new WebComboBox(items);
 		wcb.setSelectedItem(ain.cst.getClass().getSimpleName());
@@ -181,20 +183,60 @@ public class InstructionEditorPanel extends JPanel implements Opcodes {
 		panel.add(wcb, BorderLayout.WEST);
 		WebTextField field = new WebTextField(ain.cst.toString());
 		field.setMaximumWidth(maxWidth / 2);
-		field.setInputPrompt("only String supported yet..");
-		wcb.setEnabled(false);
-		field.setEnabled(ain.cst.getClass().getSimpleName().equals("String"));
+		field.setEnabled(!ain.cst.getClass().getSimpleName().equals("Handle")
+				&& !ain.cst.getClass().getSimpleName().equals("ConstantDynamic"));
 		Listeners.addChangeListener(field, c -> {
-			setField(f, ain, field.getText().trim());
+			try {
+				ldcComponentUpdate(wcb, ain, f, field);
+			} catch (Exception e) {
+				wcb.setSelectedIndex(0);
+			}
+			il.repaint();
+		});
+		wcb.addActionListener(l -> {
+			if(wcb.getSelectedIndex() >= 6) {
+				wcb.setSelectedIndex(0); //not supported yet
+			}
+			try {
+				ldcComponentUpdate(wcb, ain, f, field);
+			} catch (Exception e) {
+				wcb.setSelectedIndex(0);
+			}
 			il.repaint();
 		});
 		panel.add(field, BorderLayout.CENTER);
 		return panel;
 	}
 
-	/*
-	 * if (cst instanceof Integer) { // ... } else if (cst instanceof Float) { // ... } else if (cst instanceof Long) { // ... } else if (cst instanceof Double) { // ... } else if (cst instanceof String) { // ... } else if (cst instanceof Type) { int sort = ((Type) cst).getSort(); if (sort == Type.OBJECT) { // ... } else if (sort == Type.ARRAY) { // ... } else if (sort == Type.METHOD) { // ... } else { // throw an exception } } else if (cst instanceof Handle) { // ... } else if (cst instanceof ConstantDynamic) { // ... } else { // throw an exception }
-	 */
+	private void ldcComponentUpdate(WebComboBox wcb, LdcInsnNode ain, Field f, WebTextField field) {
+		switch (wcb.getSelectedIndex()) {
+		case 0:
+			setField(f, ain, field.getText().trim());
+			break;
+		case 1:
+			setField(f, ain, Integer.parseInt(field.getText().trim()));
+			break;
+		case 2:
+			setField(f, ain, Float.parseFloat(field.getText().trim()));
+			break;
+		case 3:
+			setField(f, ain, Long.parseLong(field.getText().trim()));
+			break;
+		case 4:
+			setField(f, ain, Double.parseDouble(field.getText().trim()));
+			break;
+		case 5:
+			setField(f, ain, Type.getType(field.getText().trim()));
+			break;
+		case 6:
+			setField(f, ain, field.getText().trim());
+			break;
+		case 7:
+			setField(f, ain, field.getText().trim());
+			break;
+		}
+	}
+
 	private void setField(Field f, AbstractInsnNode ain, Object object) {
 		// to avoid try catch blocks all the time..
 		try {
