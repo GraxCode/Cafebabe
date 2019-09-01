@@ -1,13 +1,20 @@
 package me.nov.cafebabe.utils.formatting;
 
+import java.util.Arrays;
+import java.util.stream.Collectors;
+
 import org.objectweb.asm.tree.AbstractInsnNode;
 import org.objectweb.asm.tree.FieldInsnNode;
 import org.objectweb.asm.tree.IntInsnNode;
+import org.objectweb.asm.tree.InvokeDynamicInsnNode;
 import org.objectweb.asm.tree.JumpInsnNode;
 import org.objectweb.asm.tree.LdcInsnNode;
 import org.objectweb.asm.tree.LineNumberNode;
+import org.objectweb.asm.tree.LookupSwitchInsnNode;
 import org.objectweb.asm.tree.MethodInsnNode;
 import org.objectweb.asm.tree.MethodNode;
+import org.objectweb.asm.tree.MultiANewArrayInsnNode;
+import org.objectweb.asm.tree.TableSwitchInsnNode;
 import org.objectweb.asm.tree.TypeInsnNode;
 import org.objectweb.asm.tree.VarInsnNode;
 
@@ -40,7 +47,7 @@ public class InstructionFormatting {
 			sb.append(OpcodeFormatting.getLabelIndex(((JumpInsnNode) ain).label));
 			break;
 		case AbstractInsnNode.TYPE_INSN:
-			sb.append(new EscapedString(((TypeInsnNode) ain).desc.replace('/', '.')));
+			sb.append(Descriptors.getDisplayType(((TypeInsnNode) ain).desc));
 			break;
 		case AbstractInsnNode.FIELD_INSN:
 			FieldInsnNode fin = (FieldInsnNode) ain;
@@ -73,6 +80,46 @@ public class InstructionFormatting {
 			break;
 		case AbstractInsnNode.INT_INSN:
 			sb.append(((IntInsnNode) ain).operand);
+			break;
+		case AbstractInsnNode.MULTIANEWARRAY_INSN:
+			MultiANewArrayInsnNode mani = (MultiANewArrayInsnNode) ain;
+			sb.append(Descriptors.getDisplayType(mani.desc));
+			for (int i = 0; i < mani.dims; i++)
+				sb.append("[]");
+			break;
+		case AbstractInsnNode.INVOKE_DYNAMIC_INSN:
+			InvokeDynamicInsnNode idin = (InvokeDynamicInsnNode) ain;
+			sb.append(new EscapedString(idin.name));
+			sb.append(" ");
+			sb.append(Descriptors.getDisplayType(idin.desc));
+			if (idin.bsm != null) {
+				sb.append(" ");
+				sb.append(idin.bsm.toString());
+			}
+			if (idin.bsmArgs != null) {
+				sb.append(" ");
+				sb.append(Arrays.toString(idin.bsmArgs));
+			}
+			break;
+		case AbstractInsnNode.TABLESWITCH_INSN:
+			TableSwitchInsnNode tsin = (TableSwitchInsnNode) ain;
+			sb.append("[");
+			sb.append(tsin.min);
+			sb.append(", ");
+			sb.append(tsin.max);
+			sb.append("] -> [");
+			sb.append(tsin.labels.stream().map(l -> String.valueOf(OpcodeFormatting.getLabelIndex(l))).collect(Collectors.joining(", ")));
+			sb.append("] \u2228 ");
+			sb.append(OpcodeFormatting.getLabelIndex(tsin.dflt));
+			break;
+		case AbstractInsnNode.LOOKUPSWITCH_INSN:
+			LookupSwitchInsnNode lsin = (LookupSwitchInsnNode) ain;
+			sb.append(Arrays.toString(lsin.keys.toArray()));
+			sb.append(" -> [");
+			sb.append(lsin.labels.stream().map(l -> String.valueOf(OpcodeFormatting.getLabelIndex(l))).collect(Collectors.joining(", ")));
+			sb.append("] \u2228 ");
+			sb.append(OpcodeFormatting.getLabelIndex(lsin.dflt));
+			break;
 		}
 		return sb.toString();
 	}

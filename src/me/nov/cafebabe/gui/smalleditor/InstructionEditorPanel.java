@@ -158,7 +158,7 @@ public class InstructionEditorPanel extends JPanel implements Opcodes {
 				return wcb;
 			}
 			if (f.getType() == int.class) {
-				WebSpinner ws = new WebSpinner();
+				WebSpinner ws = new WebSpinner(); //TODO minimums / maximums
 				ws.setValue(value);
 				ws.addChangeListener(l -> {
 					setField(f, ain, ws.getValue());
