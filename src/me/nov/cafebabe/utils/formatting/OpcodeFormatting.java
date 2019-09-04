@@ -503,6 +503,30 @@ public class OpcodeFormatting implements org.objectweb.asm.Opcodes {
 		}
 	}
 
+	public static String getHandleOpcodeText(int hop) {
+		switch (hop) {
+		case H_GETFIELD:
+			return "H_GETFIELD";
+		case H_GETSTATIC:
+			return "H_GETSTATIC";
+		case H_PUTFIELD:
+			return "H_PUTFIELD";
+		case H_PUTSTATIC:
+			return "H_PUTSTATIC";
+		case H_INVOKEVIRTUAL:
+			return "H_INVOKEVIRTUAL";
+		case H_INVOKESTATIC:
+			return "H_INVOKESTATIC";
+		case H_INVOKESPECIAL:
+			return "H_INVOKESPECIAL";
+		case H_NEWINVOKESPECIAL:
+			return "H_NEWINVOKESPECIAL";
+		case H_INVOKEINTERFACE:
+			return "H_INVOKEINTERFACE";
+		}
+		return null;
+	}
+
 	/**
 	 * Gets the index of a AbstractInsnNode.
 	 * 
@@ -603,7 +627,6 @@ public class OpcodeFormatting implements org.objectweb.asm.Opcodes {
 		}
 		return s;
 	}
-
 
 	public static int getLabelIndex(AbstractInsnNode ain) {
 		int index = 0;

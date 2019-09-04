@@ -39,19 +39,19 @@ public final class Handle {
 	/**
 	 * The kind of field or method designated by this Handle. Should be {@link Opcodes#H_GETFIELD}, {@link Opcodes#H_GETSTATIC}, {@link Opcodes#H_PUTFIELD}, {@link Opcodes#H_PUTSTATIC}, {@link Opcodes#H_INVOKEVIRTUAL}, {@link Opcodes#H_INVOKESTATIC}, {@link Opcodes#H_INVOKESPECIAL}, {@link Opcodes#H_NEWINVOKESPECIAL} or {@link Opcodes#H_INVOKEINTERFACE}.
 	 */
-	private final int tag;
+	public final int tag;
 
 	/** The internal name of the class that owns the field or method designated by this handle. */
-	private final String owner;
+	public final String owner;
 
 	/** The name of the field or method designated by this handle. */
-	private final String name;
+	public final String name;
 
 	/** The descriptor of the field or method designated by this handle. */
-	private final String descriptor;
+	public final String descriptor;
 
 	/** Whether the owner is an interface or not. */
-	private final boolean isInterface;
+	public final boolean isInterface;
 
 	/**
 	 * Constructs a new field or method handle.

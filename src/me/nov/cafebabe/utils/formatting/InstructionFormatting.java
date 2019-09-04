@@ -3,6 +3,8 @@ package me.nov.cafebabe.utils.formatting;
 import java.util.Arrays;
 import java.util.stream.Collectors;
 
+import org.objectweb.asm.Handle;
+import org.objectweb.asm.Type;
 import org.objectweb.asm.tree.AbstractInsnNode;
 import org.objectweb.asm.tree.FieldInsnNode;
 import org.objectweb.asm.tree.IntInsnNode;
@@ -89,16 +91,20 @@ public class InstructionFormatting {
 			break;
 		case AbstractInsnNode.INVOKE_DYNAMIC_INSN:
 			InvokeDynamicInsnNode idin = (InvokeDynamicInsnNode) ain;
-			sb.append(new EscapedString(idin.name));
+			sb.append(Descriptors.getDisplayType(idin.desc.split("\\)")[1]));
 			sb.append(" ");
-			sb.append(Descriptors.getDisplayType(idin.desc));
+			sb.append(new EscapedString(idin.name).getEscapedText());
+			sb.append("(");
+			sb.append(Descriptors.getDisplayType(idin.desc.split("\\)")[0].substring(1)));
+			sb.append(")");
 			if (idin.bsm != null) {
 				sb.append(" ");
-				sb.append(idin.bsm.toString());
+				sb.append(handleToString(idin.bsm));
 			}
 			if (idin.bsmArgs != null) {
-				sb.append(" ");
-				sb.append(Arrays.toString(idin.bsmArgs));
+				sb.append(" [");
+				sb.append(Arrays.asList(idin.bsmArgs).stream().map(l -> bsmArgToString(l)).collect(Collectors.joining(", ")));
+				sb.append("]");
 			}
 			break;
 		case AbstractInsnNode.TABLESWITCH_INSN:
@@ -108,19 +114,51 @@ public class InstructionFormatting {
 			sb.append(", ");
 			sb.append(tsin.max);
 			sb.append("] -> [");
-			sb.append(tsin.labels.stream().map(l -> String.valueOf(OpcodeFormatting.getLabelIndex(l))).collect(Collectors.joining(", ")));
-			sb.append("] \u2228 ");
-			sb.append(OpcodeFormatting.getLabelIndex(tsin.dflt));
+			sb.append(tsin.labels.stream().map(l -> String.valueOf(OpcodeFormatting.getLabelIndex(l)))
+					.collect(Collectors.joining(", ")));
+			sb.append("], [");
+			sb.append(Html.italics(String.valueOf(OpcodeFormatting.getLabelIndex(tsin.dflt))));
+			sb.append("]");
 			break;
 		case AbstractInsnNode.LOOKUPSWITCH_INSN:
 			LookupSwitchInsnNode lsin = (LookupSwitchInsnNode) ain;
 			sb.append(Arrays.toString(lsin.keys.toArray()));
 			sb.append(" -> [");
-			sb.append(lsin.labels.stream().map(l -> String.valueOf(OpcodeFormatting.getLabelIndex(l))).collect(Collectors.joining(", ")));
-			sb.append("] \u2228 ");
-			sb.append(OpcodeFormatting.getLabelIndex(lsin.dflt));
+			sb.append(lsin.labels.stream().map(l -> String.valueOf(OpcodeFormatting.getLabelIndex(l)))
+					.collect(Collectors.joining(", ")));
+			sb.append("], [");
+			sb.append(Html.italics(String.valueOf(OpcodeFormatting.getLabelIndex(lsin.dflt))));
+			sb.append("]");
 			break;
 		}
+		return sb.toString();
+	}
+
+	private static String bsmArgToString(Object l) {
+		if (l instanceof Type) {
+			return l.toString();
+		}
+		if (l instanceof Handle) {
+			return handleToString((Handle) l);
+		}
+		return l.toString();
+	}
+
+	private static String handleToString(Handle bsm) {
+		StringBuilder sb = new StringBuilder();
+		sb.append("[");
+		sb.append("<b><i>");
+		sb.append(
+				Html.color(bsm.tag < 5 ? "#44004d" : "#14004d", OpcodeFormatting.getHandleOpcodeText(bsm.tag).toLowerCase()));
+		sb.append("</i></b> ");
+		sb.append(Descriptors.getDisplayType(bsm.descriptor.split("\\)")[1]));
+		sb.append(" ");
+		sb.append(bsm.owner.replace('/', '.'));
+		sb.append(".");
+		sb.append(Html.italics(Html.color(Colors.methods, new EscapedString(bsm.name).getEscapedText())));
+		sb.append("(");
+		sb.append(Descriptors.getDisplayType(bsm.descriptor.split("\\)")[0].substring(1)));
+		sb.append(")]");
 		return sb.toString();
 	}
 
