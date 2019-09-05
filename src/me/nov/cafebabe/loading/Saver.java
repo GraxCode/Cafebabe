@@ -15,6 +15,7 @@ import java.util.jar.JarOutputStream;
 import org.objectweb.asm.ClassWriter;
 import org.objectweb.asm.tree.ClassNode;
 
+import me.nov.cafebabe.gui.ClassTree;
 import me.nov.cafebabe.utils.asm.LibClassWriter;
 
 public class Saver {
@@ -77,7 +78,9 @@ public class Saver {
 
 	public static byte[] exportNode(ClassNode cn, Map<String, ClassNode> classes, Map<String, ClassNode> libraries,
 			Map<String, String> knownCommons) {
-		ClassWriter cw = new LibClassWriter(ClassWriter.COMPUTE_FRAMES, classes, libraries, knownCommons);
+		ClassWriter cw = ClassTree.useFrameRegeneration
+				? new LibClassWriter(ClassWriter.COMPUTE_FRAMES, classes, libraries, knownCommons)
+				: new ClassWriter(ClassWriter.COMPUTE_MAXS);
 		cn.accept(cw);
 		byte[] b = cw.toByteArray();
 		return b;

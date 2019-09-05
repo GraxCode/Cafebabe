@@ -73,7 +73,9 @@ public class ClassTree extends WebTree<SortedTreeClassNode> implements IDropUser
 	public void preLoadJars(int id) {
 
 	}
-
+	
+	public static boolean useFrameRegeneration = true;
+	
 	@Override
 	public void onJarLoad(int id, File input) {
 		final WebProgressDialog progress = new WebProgressDialog(Cafebabe.gui, Translations.get("Loading"));
@@ -81,6 +83,7 @@ public class ClassTree extends WebTree<SortedTreeClassNode> implements IDropUser
 
 		// loading algorithm taken from loader class
 		final Thread loader = new Thread(new Runnable() {
+
 
 			@Override
 			public void run() {
@@ -122,7 +125,9 @@ public class ClassTree extends WebTree<SortedTreeClassNode> implements IDropUser
 								}
 								byte[] data = bos.toByteArray();
 								ClassNode cn = Loader.convertToASM(data);
-								FrameHack.findCommonParents(knownCommons, cn); // preload common super classes for frame regeneration
+								if (useFrameRegeneration) {
+									FrameHack.findCommonParents(knownCommons, cn); // preload common super classes for frame regeneration
+								}
 								classes.put(entry, cn);
 							}
 						} catch (Exception e) {

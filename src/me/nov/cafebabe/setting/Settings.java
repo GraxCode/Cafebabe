@@ -13,6 +13,7 @@ import javax.swing.JOptionPane;
 
 import me.nov.cafebabe.Cafebabe;
 import me.nov.cafebabe.decompiler.CFR;
+import me.nov.cafebabe.gui.ClassTree;
 import me.nov.cafebabe.translations.Translations;
 
 public class Settings {
@@ -21,11 +22,6 @@ public class Settings {
 
 	public static final HashMap<String, List<Setting>> settings = new HashMap<>();
 
-	/**
-	 * ppublic static boolean removeSynthetic; public static boolean commentMonitors; public static boolean topsort; public static boolean ignoreExcpetions;
-	 * 
-	 * @throws Exception
-	 */
 	public static void loadSettings() throws Exception {
 		settings
 				.put("General",
@@ -38,6 +34,9 @@ public class Settings {
 				"Use WebLaF-styled frames and dialogues", Cafebabe.class.getDeclaredField("decorated"), true, (b) -> {
 					restartGUI();
 				})));
+		settings.put("ASM",
+				Arrays.asList(new Setting("frames", "Regenerate Frames", "Regenerate frames using known commons determined at loading",
+						ClassTree.class.getDeclaredField("useFrameRegeneration"), true, null)));
 		settings.put("CFR", Arrays.asList(
 				new Setting("stringbuilders", "Decompile StringBuilder / Buffer",
 						"Decompile StringBuilder and Buffer back to default concat", CFR.class.getDeclaredField("stringBuilders"),
