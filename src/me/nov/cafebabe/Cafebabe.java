@@ -178,6 +178,7 @@ public class Cafebabe extends WebFrame {
 		editorFrame.open(c, title, icon, color);
 	}
 
+	public static boolean decorated = true;
 	public static void main(String[] args) throws Exception {
 		try {
 			folder = new File(System.getProperty("user.home"), ".cafebabe");
@@ -192,13 +193,13 @@ public class Cafebabe extends WebFrame {
 			}
 			new Translations(); //load translations
 			WebLookAndFeel.install();
-			WebLookAndFeel.setDecorateFrames(true);
-			WebLookAndFeel.setDecorateDialogs(true);
 			System.setProperty("file.encoding", "UTF-8");
 			Field charset = Charset.class.getDeclaredField("defaultCharset");
 			charset.setAccessible(true);
 			charset.set(null, null);
 			Settings.loadSettings();
+			WebLookAndFeel.setDecorateFrames(decorated);
+			WebLookAndFeel.setDecorateDialogs(decorated);
 		} catch (Throwable t) {
 			t.printStackTrace();
 		}

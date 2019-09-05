@@ -27,29 +27,25 @@ public class Settings {
 	 * @throws Exception
 	 */
 	public static void loadSettings() throws Exception {
-		settings.put("General",
-				Arrays.asList(new Setting("translate", "Translations", "Use translations stored in %userprofile%/.cafebabe/translations",
-						Translations.class.getDeclaredField("translate"), false, () -> {
-							if (JOptionPane.showConfirmDialog(Cafebabe.gui,
-									Translations.get("Do you want to restart now? Everything unsaved will be lost!"),
-									Translations.get("Confirm"), JOptionPane.YES_NO_OPTION) == JOptionPane.YES_OPTION) {
-								Cafebabe.gui.dispose();
-								try {
-									Thread.sleep(200);
-									Cafebabe.main(new String[0]);
-								} catch (Exception e) {
-									e.printStackTrace();
-								}
-							}
-						})));
+		settings
+				.put("General",
+						Arrays.asList(new Setting("translate", "Translations",
+								"Use translations stored in %userprofile%/.cafebabe/translations",
+								Translations.class.getDeclaredField("translate"), false, (b) -> {
+									restartGUI();
+								})));
+		settings.put("GUI", Arrays.asList(new Setting("decorated", "Decorate Frame",
+				"Use WebLaF-styled frames and dialogues", Cafebabe.class.getDeclaredField("decorated"), true, (b) -> {
+					restartGUI();
+				})));
 		settings.put("CFR", Arrays.asList(
 				new Setting("stringbuilders", "Decompile StringBuilder / Buffer",
 						"Decompile StringBuilder and Buffer back to default concat", CFR.class.getDeclaredField("stringBuilders"),
 						true, null),
 				new Setting("stringswitches", "Decompile String switch", "Decompile hashCode switches back to original",
 						CFR.class.getDeclaredField("stringSwitches"), true, null),
-				new Setting("trywith", "Reconstruct try-with", "Reconstruct try-with-resources", CFR.class.getDeclaredField("tryWith"),
-						true, null),
+				new Setting("trywith", "Reconstruct try-with", "Reconstruct try-with-resources",
+						CFR.class.getDeclaredField("tryWith"), true, null),
 				new Setting("lambdas", "Decompile lambdas", "Decompile Java 8 lambdas", CFR.class.getDeclaredField("lambdas"),
 						true, null),
 				new Setting("finally", "Decompile finally", "Decompile finally blocks", CFR.class.getDeclaredField("finallies"),
@@ -67,6 +63,20 @@ public class Settings {
 				new Setting("ignoreexcpetions", "Drop exception information", "Drop exception information (changes semantics)",
 						CFR.class.getDeclaredField("ignoreExcpetions"), false, null)));
 		initProperties();
+	}
+
+	private static void restartGUI() {
+		if (JOptionPane.showConfirmDialog(Cafebabe.gui,
+				Translations.get("Do you want to restart now? Everything unsaved will be lost!"), Translations.get("Confirm"),
+				JOptionPane.YES_NO_OPTION) == JOptionPane.YES_OPTION) {
+			Cafebabe.gui.dispose();
+			try {
+				Thread.sleep(200);
+				Cafebabe.main(new String[0]);
+			} catch (Exception e) {
+				e.printStackTrace();
+			}
+		}
 	}
 
 	public static void saveProperties() {
